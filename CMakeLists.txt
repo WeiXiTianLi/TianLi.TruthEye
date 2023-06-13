@@ -1,0 +1,24 @@
+﻿# CMakeList.txt: 顶层 CMake 项目文件，在此处执行全局配置
+# 并包含子项目。
+#
+cmake_minimum_required (VERSION 3.20)
+
+# Enable Hot Reload for MSVC compilers if supported.
+if (POLICY CMP0141)
+  cmake_policy(SET CMP0141 NEW)
+  set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
+endif()
+
+project ("TianLi.TruthEye")
+
+# 设置输出目录
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+
+# 包含目录
+include_directories ("${PROJECT_SOURCE_DIR}/TianLi.TruthEye")
+include_directories ("${PROJECT_SOURCE_DIR}/TianLi.TruthEye.Test")
+
+# 包含子项目。
+add_subdirectory ("TianLi.TruthEye")
+add_subdirectory ("TianLi.TruthEye.Test")
