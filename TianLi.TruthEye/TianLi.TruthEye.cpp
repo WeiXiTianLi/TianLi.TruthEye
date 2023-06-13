@@ -2,17 +2,12 @@
 //
 
 #include "TianLi.TruthEye.h"
-//3rd
+// src
+#include "src/form/te.popup.window.h"
+// 3rd
 //#include <fmt>
 // qt
 #include <QApplication>
-#include <QDesktopWidget>
-#include <QMessageBox>
-#include <QTextCodec>
-#include <QTranslator>
-#include <QFile>
-#include <QIcon>
-#include <QFileInfo>
 // std
 #include <future>
 #include <mutex>
@@ -27,43 +22,57 @@
 #include <algorithm>
 // win
 #include <Windows.h>
-static QApplication* g_app = nullptr;
-static std::thread*  g_thread = nullptr;
-static void QApplicationCreate()
-{
-    // 由于Qt的一些特性，在创建QWidget之前，必须先创建QApplication
-    // 但是，由于QApplication的构造函数中，会创建一个QDesktopWidget对象
-    // 而QDesktopWidget对象的构造函数中，会创建一个QWidget对象
-    // 因此，这里需要先创建一个QApplication对象，然后再创建一个QDesktopWidget对象
-    // 最后再创建一个QWidget对象
 
-    // 创建QApplication对象
+static QApplication* g_app = nullptr;
+static tePopupWindow* g_window = nullptr;
+static std::thread*  g_thread = nullptr;
+static std::mutex g_mutex;
+static std::condition_variable g_cv;
+static void CreateQApplication()
+{
     int argc = 1;
     TCHAR modulePath[MAX_PATH] = { 0 };
     GetModuleFileName(NULL, modulePath, MAX_PATH);
     char* argv[] = { (char*)modulePath };
     g_app = new QApplication(argc, argv);
-    // 创建QWidget对象
-    QWidget widget;
-    // 显示QWidget对象
-    widget.show();
+    g_window = new tePopupWindow();
+    g_cv.notify_one();
     g_app->exec();
 }
 
-void CreateApp()
+void TianLiTruthEye_CreateWindow()
 {
-    g_thread = new std::thread(QApplicationCreate);
+    g_thread = new std::thread(CreateQApplication);
+    std::unique_lock lock(g_mutex);
+    g_cv.wait(lock);
 }
 
-void DestroyApp()
+void TianLiTruthEye_DestroyWindow()
 {
+    if (g_app == nullptr)
+    {
+        return;
+    }
     g_app->exit(0);
     g_thread->join();
 }
 
-int RunApp()
+void TianLiTruthEye_ShowWindow()
 {
-return 0;
+    if (g_window == nullptr)
+    {
+        return;
+    }
+    g_window->show_window();
+}
+
+void TianLiTruthEye_HideWindow()
+{
+    if (g_window == nullptr)
+    {
+        return;
+    }
+    g_window->hide_window();
 }
 
 void SetJsonParams(const char* json)

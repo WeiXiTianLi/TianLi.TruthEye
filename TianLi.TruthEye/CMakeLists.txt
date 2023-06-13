@@ -19,7 +19,12 @@ set(CMAKE_AUTOUIC ON)
 add_definitions(-DTIANLI_TRUTHEYE_EXPORTS)
 
 # 将源代码添加到此项目的可执行文件。
-add_library(${PROJECT_NAME} SHARED "TianLi.TruthEye.cpp" "TianLi.TruthEye.h" )
+add_library(${PROJECT_NAME} SHARED 
+	"TianLi.TruthEye.cpp" 
+	"TianLi.TruthEye.h"  
+	"src/form/te.popup.window.cpp"
+	"src/form/te.popup.window.h" 
+)
 
 target_link_libraries(${PROJECT_NAME} Qt5::Core Qt5::Gui Qt5::Widgets)
 

@@ -1,7 +1,4 @@
-﻿// QApp.h: 动态链接库的主头文件。
-// 或项目特定的包含文件。
-
-#pragma once
+﻿#pragma once
 #ifdef TIANLI_TRUTHEYE_EXPORTS
 #define TIANLI_TRUTHEYE_API __declspec(dllexport)
 #else
@@ -20,9 +17,10 @@
 extern "C" {
 #endif
 
-    TIANLI_TRUTHEYE_API void CreateApp();
-    TIANLI_TRUTHEYE_API void DestroyApp();
-    TIANLI_TRUTHEYE_API int RunApp();
+    TIANLI_TRUTHEYE_API void TianLiTruthEye_CreateWindow();
+    TIANLI_TRUTHEYE_API void TianLiTruthEye_DestroyWindow();
+    TIANLI_TRUTHEYE_API void TianLiTruthEye_ShowWindow();
+    TIANLI_TRUTHEYE_API void TianLiTruthEye_HideWindow();
     TIANLI_TRUTHEYE_API void SetJsonParams(const char* json);
 
 #ifdef __cplusplus
