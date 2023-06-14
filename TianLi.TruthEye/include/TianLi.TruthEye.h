@@ -21,7 +21,8 @@ extern "C" {
     TIANLI_TRUTHEYE_API void TianLiTruthEye_DestroyWindow();
     TIANLI_TRUTHEYE_API void TianLiTruthEye_ShowWindow();
     TIANLI_TRUTHEYE_API void TianLiTruthEye_HideWindow();
-    TIANLI_TRUTHEYE_API void SetJsonParams(const char* json);
+    TIANLI_TRUTHEYE_API void SetJsonParams(const char* json_buff, unsigned int buff_size);
+
 
 #ifdef __cplusplus
 }

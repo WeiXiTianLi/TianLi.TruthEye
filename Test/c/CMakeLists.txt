@@ -1,11 +1,11 @@
 ﻿# CMakeList.txt: QApp.cli 的 CMake 项目，在此处包括源代码并定义
 # 项目特定的逻辑。
 #
-project(TianLi.TruthEye.Test)
+project(TianLi.TruthEye.c.test)
 
 
 # 将源代码添加到此项目的可执行文件。
-add_executable (${PROJECT_NAME} "TianLi.TruthEye.Test.cpp")
+add_executable (${PROJECT_NAME} "main.cpp")
 
 # 添加依赖项
 target_link_libraries(${PROJECT_NAME} TianLi.TruthEye)

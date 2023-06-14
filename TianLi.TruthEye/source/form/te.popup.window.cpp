@@ -1,4 +1,4 @@
-#include "te.popup.window.h"
+ï»¿#include "te.popup.window.h"
 
 void tePopupWindow::setupUi(QWidget* tePopupWindow)
 {
@@ -10,7 +10,7 @@ void tePopupWindow::setupUi(QWidget* tePopupWindow)
     label->setGeometry(10, 10, 212, 212);
     label->setAlignment(Qt::AlignCenter);
     label->setObjectName(QString::fromUtf8("label"));
-    label->setStyleSheet("QLabel{background-color:rgba(0,0,0,0.5);color:rgb(255,255,255);font-size:20px;font-weight:bold;font-family:Microsoft YaHei;border-radius:8px;}");
+    label->setStyleSheet("QLabel{background-color:rgba(0,0,0,0.5);color:rgb(255,255,255);font-size:20px;font-weight:bold;font-family:Microsoft YaHei;border-radius:106px;}");
     QGraphicsDropShadowEffect* shadow = new QGraphicsDropShadowEffect(label);
     shadow->setOffset(0, 0);
     shadow->setColor(Qt::white);
@@ -21,11 +21,11 @@ void tePopupWindow::setupUi(QWidget* tePopupWindow)
 tePopupWindow::tePopupWindow(QWidget* parent)
 {
     setupUi(this);
-    // ÉèÖÃÎŞ±ß¿ò
+    // è®¾ç½®æ— è¾¹æ¡†
     setWindowFlags(Qt::FramelessWindowHint);
-    // ÉèÖÃ±³¾°Í¸Ã÷
+    // è®¾ç½®èƒŒæ™¯é€æ˜
     setAttribute(Qt::WA_TranslucentBackground);
-    // ÉèÖÃ´°¿ÚÖÃ¶¥
+    // è®¾ç½®çª—å£ç½®é¡¶
     //setWindowFlags(Qt::WindowStaysOnTopHint);
 
     // add shadow
@@ -55,10 +55,10 @@ void tePopupWindow::mousePressEvent(QMouseEvent* event)
 {
     if (event->button() == Qt::LeftButton)
     {
-        // Êó±ê×ó¼ü°´ÏÂ
-        // ¼ÇÂ¼µ±Ç°Êó±êÎ»ÖÃ
+        // é¼ æ ‡å·¦é”®æŒ‰ä¸‹
+        // è®°å½•å½“å‰é¼ æ ‡ä½ç½®
         m_mouse_move_event.flag_pos = event->globalPos();
-        // ÉèÖÃÊó±ê°´ÏÂ±êÖ¾
+        // è®¾ç½®é¼ æ ‡æŒ‰ä¸‹æ ‡å¿—
         m_mouse_move_event.flag = true;
     }
 }
@@ -67,12 +67,12 @@ void tePopupWindow::mouseMoveEvent(QMouseEvent* event)
 {
     if (m_mouse_move_event.flag)
     {
-        // Êó±ê×ó¼ü°´ÏÂµÄÇé¿öÏÂÒÆ¶¯
-        // ¼ÆËãÊó±êÎ»ÖÃÆ«ÒÆÁ¿
+        // é¼ æ ‡å·¦é”®æŒ‰ä¸‹çš„æƒ…å†µä¸‹ç§»åŠ¨
+        // è®¡ç®—é¼ æ ‡ä½ç½®åç§»é‡
         QPoint offset = event->globalPos() - m_mouse_move_event.flag_pos;
-        // ½«´°¿ÚÒÆ¶¯µ½Êó±êÒÆ¶¯ºóµÄÎ»ÖÃ
+        // å°†çª—å£ç§»åŠ¨åˆ°é¼ æ ‡ç§»åŠ¨åçš„ä½ç½®
         move(pos() + offset);
-        // ¸üĞÂflag_pos
+        // æ›´æ–°flag_pos
         m_mouse_move_event.flag_pos = event->globalPos();
     }
 }
@@ -81,8 +81,8 @@ void tePopupWindow::mouseReleaseEvent(QMouseEvent* event)
 {
     if (event->button() == Qt::LeftButton)
     {
-        // Êó±ê×ó¼üÊÍ·Å
-        // Çå³ıÊó±ê°´ÏÂ±êÖ¾
+        // é¼ æ ‡å·¦é”®é‡Šæ”¾
+        // æ¸…é™¤é¼ æ ‡æŒ‰ä¸‹æ ‡å¿—
         m_mouse_move_event.flag = false;
     }
 }

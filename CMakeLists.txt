@@ -17,8 +17,8 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 # 包含目录
 include_directories ("${PROJECT_SOURCE_DIR}/TianLi.TruthEye")
-include_directories ("${PROJECT_SOURCE_DIR}/TianLi.TruthEye.Test")
+include_directories ("${PROJECT_SOURCE_DIR}/Test")
 
 # 包含子项目。
 add_subdirectory ("TianLi.TruthEye")
-add_subdirectory ("TianLi.TruthEye.Test")
+add_subdirectory ("Test")
