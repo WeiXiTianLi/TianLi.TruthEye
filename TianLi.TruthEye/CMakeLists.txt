@@ -4,7 +4,6 @@
 project(TianLi.TruthEye)
 
 # 该项目为静态链接Qt5的动态链接库
-
 # Qt5
 set(Qt5_DIR "C:/Qt/5.15.7/msvc2019_x64_static/lib/cmake/Qt5")
 #set(Qt5_DIR "C:/Qt/5.15.2/msvc2019_64/lib/cmake/Qt5")
@@ -20,8 +19,16 @@ add_definitions(-DTIANLI_TRUTHEYE_EXPORTS)
 
 # 添加本地第三方库
 include_directories("3rdparty")
+include_directories("3rdparty")
+include_directories("3rdparty/cpr/include")
+# 添加库搜索路径
+link_directories("3rdparty/cpr/lib")
 
 
+
+set(MSVC_RUNTIME_LIBRARY "MultiThreaded")
+
+# vcpkg
 # 将源代码添加到此项目的可执行文件。
 add_library(${PROJECT_NAME} SHARED 
 	"source/TianLi.TruthEye.cpp" 
@@ -30,12 +37,20 @@ add_library(${PROJECT_NAME} SHARED
 	"source/form/te.popup.window.h" 
 )
 
+#set_target_properties(${PROJECT_NAME}  PROPERTIES INTERFACE_LINK_LIBRARIES "")
+
+set_property(TARGET ${PROJECT_NAME} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreadedDebug")
+
+
+
+# link 3rdparty lib
+target_link_libraries(${PROJECT_NAME} PRIVATE tianli.libcurl Crypt32)
+target_link_libraries(${PROJECT_NAME} PRIVATE tianli.cpr-d)
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Core Qt5::Gui Qt5::Widgets)
 
 # used utf-8 encoding
 target_compile_options(${PROJECT_NAME} PRIVATE "/utf-8")
 
-set_property(TARGET ${PROJECT_NAME} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 20)

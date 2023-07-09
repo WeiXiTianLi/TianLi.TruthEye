@@ -22,12 +22,12 @@ int main()
             "url" : "http://assets.yuanshen.site/icons/59.png",
             "points" : [
         {
-            "x": 100,
-                "y" : 100
+            "x": 10,
+                "y" : 10
         },
                     {
-                        "x": 200,
-                        "y" : 200
+                        "x": 12,
+                        "y" : 12
                     }
             ]
     },
@@ -36,8 +36,8 @@ int main()
                 "url" : "http://assets.yuanshen.site/icons/59.png",
                 "points" : [
                    {
-                        "x": 10,
-                        "y" : 10
+                        "x": 20,
+                        "y" : 30
                     }
                 ]
             }
@@ -47,11 +47,11 @@ int main()
     SetJsonParams(json_str.c_str(), json_str.size());
         
 	this_thread::sleep_for(2s);
-	TianLiTruthEye_HideWindow();
+	//TianLiTruthEye_HideWindow();
 	this_thread::sleep_for(2s);
-	TianLiTruthEye_ShowWindow();
+	//TianLiTruthEye_ShowWindow();
 	this_thread::sleep_for(2s);
-	TianLiTruthEye_HideWindow();
+	//TianLiTruthEye_HideWindow();
 	this_thread::sleep_for(2s);
 	TianLiTruthEye_DestroyWindow();
 	return 0;
