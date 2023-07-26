@@ -1,6 +1,6 @@
 project(TianLiTruthEye.csharp.test LANGUAGES CSharp)
 
-set(CMAKE_CSharp_FLAGS "/langversion:latest")
+set(CMAKE_CSharp_FLAGS "/langversion:latest /platform:x64")
 
 add_executable(TianLiTruthEye.csharp.test
 	Program.cs
