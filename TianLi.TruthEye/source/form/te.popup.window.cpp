@@ -145,8 +145,12 @@ QPixmap tePopupWindow::get_icon(const std::string& icon_name, const std::string&
 
 void tePopupWindow::set_json_params(const char* json_buff, unsigned int buff_size)
 {
-    std::string jsonStr(json_buff, buff_size);
-    auto json_res = json::parse(jsonStr);
+    // copy buff to string
+    auto json_buff_copy = std::make_unique<char[]>(buff_size);
+    memcpy(json_buff_copy.get(), json_buff, buff_size);
+
+    std::string json_str(json_buff_copy.get(), buff_size);
+    auto json_res = json::parse(json_str);
     if (json_res.has_value() == false)
     {
         return;
