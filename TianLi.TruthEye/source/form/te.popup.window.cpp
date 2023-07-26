@@ -194,4 +194,5 @@ void tePopupWindow::set_json_params(const char* json_buff, unsigned int buff_siz
         auto pix = get_icon(item.name, item.url);
         add_icons(pix, item.name, item.url, item.points);
     }
+    update();
 }
