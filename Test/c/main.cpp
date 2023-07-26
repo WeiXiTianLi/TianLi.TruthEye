@@ -1,4 +1,4 @@
-﻿// QAppMutRelease.cpp: 定义应用程序的入口点。
+// QAppMutRelease.cpp: 定义应用程序的入口点。
 //
 #include "../TianLi.TruthEye/include/TianLi.TruthEye.h"
 // std
@@ -59,7 +59,7 @@ for (int i = 0; i < 10; i++)
     {
         objs[0].points[0].x += 5;
     auto json_str = format_json(objs);
-        SetJsonParams(json_str.c_str(), json_str.size());
+        TianLiTruthEye_SetJsonParams(json_str.c_str(), json_str.size());
     this_thread::sleep_for(100ms);
 
     }

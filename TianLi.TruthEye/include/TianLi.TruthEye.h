@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #ifdef TIANLI_TRUTHEYE_EXPORTS
 #define TIANLI_TRUTHEYE_API __declspec(dllexport)
 #else
@@ -21,8 +21,7 @@ extern "C" {
     TIANLI_TRUTHEYE_API void TianLiTruthEye_DestroyWindow();
     TIANLI_TRUTHEYE_API void TianLiTruthEye_ShowWindow();
     TIANLI_TRUTHEYE_API void TianLiTruthEye_HideWindow();
-    TIANLI_TRUTHEYE_API void SetJsonParams(const char* json_buff, unsigned int buff_size);
-
+    TIANLI_TRUTHEYE_API void TianLiTruthEye_SetJsonParams(const char *json_buff, unsigned int buff_size);
 
 #ifdef __cplusplus
 }

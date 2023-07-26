@@ -1,4 +1,4 @@
-﻿// QApp.cpp: 定义动态链接库的实现
+// QApp.cpp: 定义动态链接库的实现
 //
 
 #include "../include/TianLi.TruthEye.h"
@@ -81,7 +81,7 @@ void TianLiTruthEye_HideWindow()
     g_window->hide_window();
 }
 
-void SetJsonParams(const char* json_buff, unsigned int buff_size)
+void TianLiTruthEye_SetJsonParams(const char *json_buff, unsigned int buff_size)
 {
     if (g_window == nullptr)
     {
