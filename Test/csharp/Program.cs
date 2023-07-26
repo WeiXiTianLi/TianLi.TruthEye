@@ -39,9 +39,9 @@ namespace TianLiTruthEye.csharp.test
             // call
             //TruthEye.TianLiTruthEye_SetImage(image_buff, bitmap.Width, bitmap.Height);
 
-            
 
-            
+
+
 
 
             TruthEye.TianLiTruthEye_HideWindow();

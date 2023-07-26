@@ -13,28 +13,25 @@
 #include <future>
 #include <mutex>
 #include <atomic>
-void tePopupWindow::setupUi(QWidget* tePopupWindow)
+void tePopupWindow::setupUi(QWidget *tePopupWindow)
 {
     tePopupWindow->setObjectName(QString::fromUtf8("tePopupWindow"));
     tePopupWindow->resize(232, 232);
 
-
-
-
-    QLabel* label = new QLabel(tePopupWindow);
-    //label->setText("Hello World");
+    QLabel *label = new QLabel(tePopupWindow);
+    // label->setText("Hello World");
     label->setGeometry(10, 10, 212, 212);
     label->setAlignment(Qt::AlignCenter);
     label->setObjectName(QString::fromUtf8("label"));
     label->setStyleSheet("QLabel{background-color:rgba(0,0,0,0.1);color:rgb(255,255,255);font-size:20px;font-weight:bold;font-family:Microsoft YaHei;border-radius:106px;}");
-    QGraphicsDropShadowEffect* shadow = new QGraphicsDropShadowEffect(label);
+    QGraphicsDropShadowEffect *shadow = new QGraphicsDropShadowEffect(label);
     shadow->setOffset(0, 0);
     shadow->setColor(Qt::white);
     shadow->setBlurRadius(10);
     label->setGraphicsEffect(shadow);
 }
 
-tePopupWindow::tePopupWindow(QWidget* parent)
+tePopupWindow::tePopupWindow(QWidget *parent)
 {
     setupUi(this);
     // 设置无边框
@@ -42,27 +39,26 @@ tePopupWindow::tePopupWindow(QWidget* parent)
     // 设置背景透明
     setAttribute(Qt::WA_TranslucentBackground);
     // 设置窗口置顶
-    //setWindowFlags(Qt::WindowStaysOnTopHint);
+    // setWindowFlags(Qt::WindowStaysOnTopHint);
 
     // add shadow
 
     connect(this, &tePopupWindow::show_window, this, &tePopupWindow::show);
     connect(this, &tePopupWindow::hide_window, this, &tePopupWindow::hide);
     connect(this, &tePopupWindow::signal_set_json_params, this, &tePopupWindow::set_json_params);
-
 }
 
 tePopupWindow::~tePopupWindow()
 {
 }
 
-void tePopupWindow::paintEvent(QPaintEvent* event)
+void tePopupWindow::paintEvent(QPaintEvent *event)
 {
     // 根据icons_pos绘制icon
     QPainter painter(this);
-    for (auto& [name, icon] : m_icons)
+    for (auto &[name, icon] : m_icons)
     {
-        for (auto& pos : m_icons_pos[name])
+        for (auto &pos : m_icons_pos[name])
         {
             // 以窗口中心为原点 以icon的中心为绘制点
             auto p = pos + QPointF(width() / 2, height() / 2) - QPointF(icon.width() / 2, icon.height() / 2);
@@ -72,7 +68,7 @@ void tePopupWindow::paintEvent(QPaintEvent* event)
     }
 }
 
-void tePopupWindow::mousePressEvent(QMouseEvent* event)
+void tePopupWindow::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton)
     {
@@ -84,7 +80,7 @@ void tePopupWindow::mousePressEvent(QMouseEvent* event)
     }
 }
 
-void tePopupWindow::mouseMoveEvent(QMouseEvent* event)
+void tePopupWindow::mouseMoveEvent(QMouseEvent *event)
 {
     if (m_mouse_move_event.flag)
     {
@@ -98,7 +94,7 @@ void tePopupWindow::mouseMoveEvent(QMouseEvent* event)
     }
 }
 
-void tePopupWindow::mouseReleaseEvent(QMouseEvent* event)
+void tePopupWindow::mouseReleaseEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton)
     {
@@ -108,20 +104,19 @@ void tePopupWindow::mouseReleaseEvent(QMouseEvent* event)
     }
 }
 
-
-void tePopupWindow::add_icon(QPixmap icon, const std::string& icon_name,  const QPointF& pos)
+void tePopupWindow::add_icon(QPixmap icon, const std::string &icon_name, const QPointF &pos)
 {
     m_icons[icon_name] = icon;
     m_icons_pos[icon_name].push_back(pos);
 }
 
-void tePopupWindow::add_icons(QPixmap icon, const std::string& icon_name, const std::string& icon_url, const std::vector<QPointF>& pos)
+void tePopupWindow::add_icons(QPixmap icon, const std::string &icon_name, const std::string &icon_url, const std::vector<QPointF> &pos)
 {
     m_icons[icon_name] = icon;
     m_icons_pos[icon_name] = pos;
 }
 
-QPixmap tePopupWindow::get_icon(const std::string& icon_name, const std::string& icon_url)
+QPixmap tePopupWindow::get_icon(const std::string &icon_name, const std::string &icon_url)
 {
     // 缓存直接返回
     auto it = m_icon_cache.find(icon_name);
@@ -130,20 +125,20 @@ QPixmap tePopupWindow::get_icon(const std::string& icon_name, const std::string&
         return it->second;
     }
     // 下载
-    auto res = cpr::Get(cpr::Url{ icon_url });
+    auto res = cpr::Get(cpr::Url{icon_url});
     if (res.status_code != 200)
     {
         return QPixmap();
     }
     // 转换
     QPixmap pixmap;
-    pixmap.loadFromData((unsigned char*)res.text.c_str(), res.text.size());
+    pixmap.loadFromData((unsigned char *)res.text.c_str(), res.text.size());
     // 缓存
     m_icon_cache[icon_name] = pixmap;
     return pixmap;
 }
 
-void tePopupWindow::set_json_params(const char* json_buff, unsigned int buff_size)
+void tePopupWindow::set_json_params(const char *json_buff, unsigned int buff_size)
 {
     // copy buff to string
     auto json_buff_copy = std::make_unique<char[]>(buff_size);
@@ -174,12 +169,12 @@ void tePopupWindow::set_json_params(const char* json_buff, unsigned int buff_siz
     };
 
     std::vector<item_set> items;
-    for (auto& item : json["content"].as_array())
+    for (auto &item : json["content"].as_array())
     {
         item_set item_set;
         item_set.name = item["name"].as_string();
         item_set.url = item["url"].as_string();
-        for (auto& point : item["points"].as_array())
+        for (auto &point : item["points"].as_array())
         {
             QPointF qpoint;
             qpoint.setX(point["x"].as_float());
@@ -189,7 +184,7 @@ void tePopupWindow::set_json_params(const char* json_buff, unsigned int buff_siz
         items.push_back(item_set);
     }
     // download image
-    for (auto& item : items)
+    for (auto &item : items)
     {
         auto pix = get_icon(item.name, item.url);
         add_icons(pix, item.name, item.url, item.points);

@@ -1,11 +1,11 @@
-// QApp.cpp: 定义动态链接库的实现
+﻿// QApp.cpp: 定义动态链接库的实现
 //
 
 #include "../include/TianLi.TruthEye.h"
 // src
 #include "source/form/te.popup.window.h"
 // vcpkg
-//#include <cpr/cpr.h>
+// #include <cpr/cpr.h>
 // qt
 #include <QApplication>
 #include <QMetaType>
@@ -24,23 +24,22 @@
 // win
 #include <Windows.h>
 
-static QApplication* g_app = nullptr;
-static tePopupWindow* g_window = nullptr;
-static std::thread*  g_thread = nullptr;
+static QApplication *g_app = nullptr;
+static tePopupWindow *g_window = nullptr;
+static std::thread *g_thread = nullptr;
 static std::mutex g_mutex;
 static std::condition_variable g_cv;
 static void CreateQApplication()
 {
     int argc = 1;
-    TCHAR modulePath[MAX_PATH] = { 0 };
+    TCHAR modulePath[MAX_PATH] = {0};
     GetModuleFileName(NULL, modulePath, MAX_PATH);
-    char* argv[] = { (char*)modulePath };
+    char *argv[] = {(char *)modulePath};
     // 高分屏支持
     g_app->setAttribute(Qt::AA_EnableHighDpiScaling);
     g_app = new QApplication(argc, argv);
 
-    
-    //QMetaType::registerComparators<std::string>();
+    // QMetaType::registerComparators<std::string>();
     g_window = new tePopupWindow();
     g_cv.notify_one();
     g_app->exec();

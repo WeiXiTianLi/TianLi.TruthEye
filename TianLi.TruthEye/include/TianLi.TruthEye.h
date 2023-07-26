@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #ifdef TIANLI_TRUTHEYE_EXPORTS
 #define TIANLI_TRUTHEYE_API __declspec(dllexport)
 #else
@@ -14,7 +14,8 @@
 #endif
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
     TIANLI_TRUTHEYE_API void TianLiTruthEye_CreateWindow();
@@ -26,7 +27,3 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
-
-
-
-
