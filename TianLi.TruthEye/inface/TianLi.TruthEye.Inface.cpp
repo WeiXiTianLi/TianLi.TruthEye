@@ -88,7 +88,7 @@ bool TianLiTruthEye_Impl_Load(bool is_reload)
     impl->is_loaded = true;
     return true;
 }
-bool TianLiTruthEye_Impl_Load_Version(const char *json_buff)
+bool TianLiTruthEye_Impl_Load_Version(const char *version)
 {
     return true;
 }

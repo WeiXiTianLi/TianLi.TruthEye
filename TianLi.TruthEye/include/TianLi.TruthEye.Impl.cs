@@ -12,7 +12,7 @@ namespace TianLi
     public class TruthEyeApis
     {
         public delegate bool ImplLoad_Type(bool isReload = false);
-        public delegate bool ImplLoadVersion_Type(byte[] json_buff);
+        public delegate bool ImplLoadVersion_Type(byte[] version);
         public delegate bool ImplFree_Type();
         public delegate bool CreateWindow_Type();
         public delegate bool DestroyWindow_Type();
@@ -78,11 +78,11 @@ namespace TianLi
             return func(isReload);
         }
 
-        public bool ImplLoadVersion(byte[] json_buff)
+        public bool ImplLoadVersion(byte[] version)
         {
             if (TianLiTruthEye_Impl_Load_Version_Func == IntPtr.Zero) return false;
             ImplLoadVersion_Type func = (ImplLoadVersion_Type)Marshal.GetDelegateForFunctionPointer(TianLiTruthEye_Impl_Load_Version_Func, typeof(ImplLoadVersion_Type));
-            return func(json_buff);
+            return func(version);
         }
 
         public bool ImplFree()
@@ -159,10 +159,10 @@ namespace TianLi
             return Apis.ImplLoad(isReload);
         }
 
-        public bool ImplLoadVersion(string json)
+        public bool ImplLoadVersion(string version)
         {
-            byte[] json_buff = System.Text.Encoding.Default.GetBytes(json);
-            return Apis.ImplLoadVersion(json_buff);
+            byte[] version_buff = System.Text.Encoding.Default.GetBytes(version);
+            return Apis.ImplLoadVersion(version_buff);
         }
 
         public bool ImplFree()
