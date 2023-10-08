@@ -26,7 +26,7 @@
 
 static QApplication *g_app = nullptr;
 static tePopupWindow *g_window = nullptr;
-static std::thread *g_thread = nullptr;
+static std::thread g_thread;
 static std::mutex g_mutex;
 static std::condition_variable g_cv;
 static void CreateQApplication()
@@ -35,19 +35,23 @@ static void CreateQApplication()
     TCHAR modulePath[MAX_PATH] = {0};
     GetModuleFileName(NULL, modulePath, MAX_PATH);
     char *argv[] = {(char *)modulePath};
-    // 高分屏支持
     g_app->setAttribute(Qt::AA_EnableHighDpiScaling);
-    g_app = new QApplication(argc, argv);
-
-    // QMetaType::registerComparators<std::string>();
+    QApplication app(argc, argv);
+    g_app = &app;
     g_window = new tePopupWindow();
+    // 窗口创建完成
     g_cv.notify_one();
     g_app->exec();
 }
 
 void TianLiTruthEye_CreateWindow()
 {
-    g_thread = new std::thread(CreateQApplication);
+    if (g_app != nullptr)
+    {
+        return;
+    }
+    g_thread = std::thread(CreateQApplication);
+    // 等待窗口创建完成
     std::unique_lock lock(g_mutex);
     g_cv.wait(lock);
 }
@@ -59,7 +63,7 @@ void TianLiTruthEye_DestroyWindow()
         return;
     }
     g_app->exit(0);
-    g_thread->join();
+    g_thread.join();
 }
 
 void TianLiTruthEye_ShowWindow()

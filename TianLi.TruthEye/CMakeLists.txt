@@ -1,4 +1,4 @@
-﻿# CMakeList.txt: QAppMutRelease 的 CMake 项目，在此处包括源代码并定义
+# CMakeList.txt: QAppMutRelease 的 CMake 项目，在此处包括源代码并定义
 # 项目特定的逻辑。
 #
 project(TianLi.TruthEye)
@@ -18,7 +18,6 @@ set(CMAKE_AUTOUIC ON)
 add_definitions(-DTIANLI_TRUTHEYE_EXPORTS)
 
 # 添加本地第三方库
-include_directories("3rdparty")
 include_directories("3rdparty")
 include_directories("3rdparty/cpr/include")
 # 添加库搜索路径
