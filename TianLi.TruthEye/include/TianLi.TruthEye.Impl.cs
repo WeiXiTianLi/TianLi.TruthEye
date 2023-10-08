@@ -32,31 +32,23 @@ namespace TianLi
 
         private bool getFuncName(string fieldName, ref string funcName)
         {
-            if (fieldName.Contains("_") == false)
-                return false;
-            if (fieldName.Substring(fieldName.Length - 4, 4) != "Func")
-                return false;
+            if (fieldName.Contains("_") == false) return false;
+            if (fieldName.Substring(fieldName.Length - 4, 4) != "Func") return false;
             funcName = fieldName.Substring(0, fieldName.Length - 5);
             return true;
         }
         public delegate IntPtr GetAddress(IntPtr lib, String funcName);
         public bool LoadApis(IntPtr libPtr, GetAddress getAddr)
         {
-            if (libPtr == IntPtr.Zero)
-                return false;
+            if (libPtr == IntPtr.Zero) return false;
             // 获取apis类的成员变量列表
             FieldInfo[] fields = GetType().GetFields();
             foreach (FieldInfo field in fields)
             {
                 string name = "";
-                if (!getFuncName(field.Name, ref name))
-                    continue;
+                if (!getFuncName(field.Name, ref name)) continue;
                 IntPtr funcPtr = getAddr(libPtr, name);
-                if (funcPtr == IntPtr.Zero)
-                {
-                    Debug.LogWarning("get " + name + " failed");
-                    return false;
-                }
+                if (funcPtr == IntPtr.Zero) return false;
                 field.SetValue(this, funcPtr);
             }
             IsLoad = true;
@@ -65,15 +57,13 @@ namespace TianLi
 
         public bool FreeApis(IntPtr libPtr)
         {
-            if (libPtr != IntPtr.Zero)
-            { return false; }
+            if (libPtr != IntPtr.Zero) return false;
             // 获取apis类的成员变量列表
             FieldInfo[] fields = GetType().GetFields();
             foreach (FieldInfo field in fields)
             {
                 string name = "";
-                if (!getFuncName(field.Name, ref name))
-                    continue;
+                if (!getFuncName(field.Name, ref name)) continue;
                 IntPtr funcPtr = (IntPtr)field.GetValue(this);
                 field.SetValue(this, IntPtr.Zero);
             }
@@ -83,67 +73,56 @@ namespace TianLi
 
         public bool ImplLoad(bool isReload = false)
         {
-            if (TianLiTruthEye_Impl_Load_Func == IntPtr.Zero)
-            {
-                Debug.LogWarning("TianLiTruthEye_Impl_Load_Func is null");
-                return false;
-            }
+            if (TianLiTruthEye_Impl_Load_Func == IntPtr.Zero) return false;
             ImplLoad_Type func = (ImplLoad_Type)Marshal.GetDelegateForFunctionPointer(TianLiTruthEye_Impl_Load_Func, typeof(ImplLoad_Type));
             return func(isReload);
         }
 
         public bool ImplLoadVersion(byte[] json_buff)
         {
-            if (TianLiTruthEye_Impl_Load_Version_Func == IntPtr.Zero)
-                return false;
+            if (TianLiTruthEye_Impl_Load_Version_Func == IntPtr.Zero) return false;
             ImplLoadVersion_Type func = (ImplLoadVersion_Type)Marshal.GetDelegateForFunctionPointer(TianLiTruthEye_Impl_Load_Version_Func, typeof(ImplLoadVersion_Type));
             return func(json_buff);
         }
 
         public bool ImplFree()
         {
-            if (TianLiTruthEye_Impl_Free_Func == IntPtr.Zero)
-                return false;
+            if (TianLiTruthEye_Impl_Free_Func == IntPtr.Zero) return false;
             ImplFree_Type func = (ImplFree_Type)Marshal.GetDelegateForFunctionPointer(TianLiTruthEye_Impl_Free_Func, typeof(ImplFree_Type));
             return func();
         }
 
         public bool CreateWindow()
         {
-            if (TianLiTruthEye_CreateWindow_Func == IntPtr.Zero)
-                return false;
+            if (TianLiTruthEye_CreateWindow_Func == IntPtr.Zero) return false;
             CreateWindow_Type func = (CreateWindow_Type)Marshal.GetDelegateForFunctionPointer(TianLiTruthEye_CreateWindow_Func, typeof(CreateWindow_Type));
             return func();
         }
 
         public bool DestroyWindow()
         {
-            if (TianLiTruthEye_DestroyWindow_Func == IntPtr.Zero)
-                return false;
+            if (TianLiTruthEye_DestroyWindow_Func == IntPtr.Zero) return false;
             DestroyWindow_Type func = (DestroyWindow_Type)Marshal.GetDelegateForFunctionPointer(TianLiTruthEye_DestroyWindow_Func, typeof(DestroyWindow_Type));
             return func();
         }
 
         public bool ShowWindow()
         {
-            if (TianLiTruthEye_ShowWindow_Func == IntPtr.Zero)
-                return false;
+            if (TianLiTruthEye_ShowWindow_Func == IntPtr.Zero) return false;
             ShowWindow_Type func = (ShowWindow_Type)Marshal.GetDelegateForFunctionPointer(TianLiTruthEye_ShowWindow_Func, typeof(ShowWindow_Type));
             return func();
         }
 
         public bool HideWindow()
         {
-            if (TianLiTruthEye_HideWindow_Func == IntPtr.Zero)
-                return false;
+            if (TianLiTruthEye_HideWindow_Func == IntPtr.Zero) return false;
             HideWindow_Type func = (HideWindow_Type)Marshal.GetDelegateForFunctionPointer(TianLiTruthEye_HideWindow_Func, typeof(HideWindow_Type));
             return func();
         }
 
         public bool SetJsonParams(byte[] json_buff, int buff_size)
         {
-            if (TianLiTruthEye_SetJsonParams_Func == IntPtr.Zero)
-                return false;
+            if (TianLiTruthEye_SetJsonParams_Func == IntPtr.Zero) return false;
             SetJsonParams_Type func = (SetJsonParams_Type)Marshal.GetDelegateForFunctionPointer(TianLiTruthEye_SetJsonParams_Func, typeof(SetJsonParams_Type));
             return func(json_buff, buff_size);
         }
@@ -161,23 +140,17 @@ namespace TianLi
         public bool Load(string libPath)
         {
             LibPath = libPath;
-            if (LibPtr != IntPtr.Zero)
-                return false;
+            if (LibPtr != IntPtr.Zero) return false;
             LibPtr = LoadLibraryExW(LibPath, IntPtr.Zero, LoadLibraryFlags.LOAD_WITH_ALTERED_SEARCH_PATH);
-            if (LibPtr == IntPtr.Zero)
-            {
-                return false;
-            }
+            if (LibPtr == IntPtr.Zero) return false;
             return Apis.LoadApis(LibPtr, GetProcAddress);
         }
 
         public bool Free()
         {
-            if (LibPtr == IntPtr.Zero)
-                return false;
+            if (LibPtr == IntPtr.Zero) return false;
             bool ret = FreeLibrary(LibPtr);
-            if (ret)
-                LibPtr = IntPtr.Zero;
+            if (ret) LibPtr = IntPtr.Zero;
             return Apis.FreeApis(LibPtr);
         }
 
