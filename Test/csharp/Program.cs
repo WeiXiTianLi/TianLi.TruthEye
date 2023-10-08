@@ -51,8 +51,6 @@ namespace TianLiTruthEye.csharp.test
             TruthEyeInface.CreateWindow();
             TruthEyeInface.ShowWindow();
 
-
-
             obj[] objs = new obj[2];
             objs[0].name = "风晶蝶";
             objs[0].url = "http://assets.yuanshen.site/icons/59.png";
@@ -77,14 +75,8 @@ namespace TianLiTruthEye.csharp.test
                 Console.WriteLine(json);
             }
 
-
-            // wait
-            //Console.ReadKey();
-
             // wait for 5 seconds
             System.Threading.Thread.Sleep(5000);
-
-
 
             TruthEyeInface.HideWindow();
             TruthEyeInface.DestroyWindow();
