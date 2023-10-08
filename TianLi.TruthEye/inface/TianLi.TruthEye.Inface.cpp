@@ -1,4 +1,4 @@
-﻿// QApp.cpp: 定义动态链接库的实现
+// QApp.cpp: 定义动态链接库的实现
 //
 
 #include "../include/TianLi.TruthEye.h"
@@ -53,7 +53,7 @@ public:
 };
 #define impl lib_impl::get_instance()
 
-bool TianLiTruthEye_Impl_Load(bool is_reload)
+bool TianLiTruthEye_Impl_Load(const char *path, bool is_reload)
 {
     if (impl->libptr != nullptr)
     {
@@ -64,7 +64,20 @@ bool TianLiTruthEye_Impl_Load(bool is_reload)
         FreeLibrary(impl->libptr);
         impl->libptr = nullptr;
     }
-    impl->libptr = LoadLibraryA(impl->libpath.c_str());
+    if (path != nullptr)
+    {
+        impl->libpath = std::string{path};
+    }
+    if (impl->libpath.empty())
+    {
+        impl->libpath = "TianLi.TruthEye.dll";
+    }
+    // 相对路径不一定找不到，所以不需要判断
+    // if (std::filesystem::exists(impl->libpath) == false)
+    // {
+    //     return false;
+    // }
+    impl->libptr = LoadLibrary(impl->libpath.c_str());
     if (impl->libptr == nullptr)
     {
         return false;
@@ -112,9 +125,7 @@ void TianLiTruthEye_CreateWindow()
 {
     if (impl->is_loaded == false)
     {
-        // return;
-        TianLiTruthEye_Impl_Load();
-        if (impl->is_loaded == false)
+        if (TianLiTruthEye_Impl_Load(nullptr, false) == false)
         {
             return;
         }

@@ -27,7 +27,7 @@ extern "C"
     TIANLI_TRUTHEYE_API bool TianLiTruthEye_Impl_Get_Version(char *json_buff, unsigned int buff_size);
     TIANLI_TRUTHEYE_API void TianLiTruthEye_Impl_Async_Download(void (*progress)(int, int));
     TIANLI_TRUTHEYE_API void TianLiTruthEye_Impl_Async_Install(void (*progress)(int, int));
-    TIANLI_TRUTHEYE_API bool TianLiTruthEye_Impl_Load(bool is_reload = false);
+    TIANLI_TRUTHEYE_API bool TianLiTruthEye_Impl_Load(const char *path = nullptr, bool is_reload = false);
     TIANLI_TRUTHEYE_API bool TianLiTruthEye_Impl_Load_Version(const char *version);
     TIANLI_TRUTHEYE_API bool TianLiTruthEye_Impl_Free();
 #endif

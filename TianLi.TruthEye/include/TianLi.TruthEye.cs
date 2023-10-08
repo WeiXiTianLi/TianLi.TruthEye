@@ -8,7 +8,7 @@ namespace TianLi
     public class TruthEyeInface
     {
         [DllImport("TianLi.TruthEye.Inface.dll", EntryPoint = "TianLiTruthEye_Impl_Load", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void Load(bool is_release = false);
+        public static extern void Load(byte[] path = null, bool is_release = false);
 
         [DllImport("TianLi.TruthEye.Inface.dll", EntryPoint = "TianLiTruthEye_Impl_Free", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
         public static extern void Free();

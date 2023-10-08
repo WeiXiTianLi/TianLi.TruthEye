@@ -11,7 +11,7 @@ namespace TianLi
 {
     public class TruthEyeApis
     {
-        public delegate bool ImplLoad_Type(bool isReload = false);
+        public delegate bool ImplLoad_Type(byte[] path = null, bool isReload = false);
         public delegate bool ImplLoadVersion_Type(byte[] version);
         public delegate bool ImplFree_Type();
         public delegate bool CreateWindow_Type();
@@ -71,11 +71,11 @@ namespace TianLi
             return true;
         }
 
-        public bool ImplLoad(bool isReload = false)
+        public bool ImplLoad(byte[] path = null, bool isReload = false)
         {
             if (TianLiTruthEye_Impl_Load_Func == IntPtr.Zero) return false;
             ImplLoad_Type func = (ImplLoad_Type)Marshal.GetDelegateForFunctionPointer(TianLiTruthEye_Impl_Load_Func, typeof(ImplLoad_Type));
-            return func(isReload);
+            return func(path, isReload);
         }
 
         public bool ImplLoadVersion(byte[] version)
