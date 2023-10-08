@@ -1,4 +1,4 @@
-// QApp.cpp: 定义动态链接库的实现
+﻿// QApp.cpp: 定义动态链接库的实现
 //
 
 #include "../include/TianLi.TruthEye.h"
@@ -140,10 +140,11 @@ void TianLiTruthEye_DestroyWindow()
         return;
     }
     impl->destroy_funcptr();
-    if (impl->is_loaded == true)
-    {
-        TianLiTruthEye_Impl_Free();
-    }
+    // 可能需要自动加载，但是释放的时候需要明确的手动执行
+    // if (impl->is_loaded == true)
+    // {
+    //     TianLiTruthEye_Impl_Free();
+    // }
 }
 
 void TianLiTruthEye_ShowWindow()
