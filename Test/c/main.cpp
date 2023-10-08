@@ -63,7 +63,7 @@ int main()
         this_thread::sleep_for(100ms);
     }
 
-    this_thread::sleep_for(2s);
+    this_thread::sleep_for(100ms);
     // TianLiTruthEye_HideWindow();
     // this_thread::sleep_for(2s);
     // TianLiTruthEye_ShowWindow();

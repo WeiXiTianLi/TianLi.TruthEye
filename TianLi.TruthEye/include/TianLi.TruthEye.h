@@ -17,7 +17,20 @@
 extern "C"
 {
 #endif
-
+#ifdef TIANLI_TRUTHEYE_IMPL
+    TIANLI_TRUTHEYE_API bool TianLiTruthEye_Impl_Check_Update();
+    TIANLI_TRUTHEYE_API bool TianLiTruthEye_Impl_Get_Update_Info(char *json_buff, unsigned int buff_size);
+    TIANLI_TRUTHEYE_API bool TianLiTruthEye_Impl_Checkout_Version(char *json_buff, unsigned int buff_size);
+    TIANLI_TRUTHEYE_API bool TianLiTruthEye_Impl_Auto_Checkout_Version(char *json_buff, unsigned int buff_size,
+                                                                       void (*download_progress)(int, int),
+                                                                       void (*install_progress)(int, int));
+    TIANLI_TRUTHEYE_API bool TianLiTruthEye_Impl_Get_Version(char *json_buff, unsigned int buff_size);
+    TIANLI_TRUTHEYE_API void TianLiTruthEye_Impl_Async_Download(void (*progress)(int, int));
+    TIANLI_TRUTHEYE_API void TianLiTruthEye_Impl_Async_Install(void (*progress)(int, int));
+    TIANLI_TRUTHEYE_API bool TianLiTruthEye_Impl_Load(bool is_reload = false);
+    TIANLI_TRUTHEYE_API bool TianLiTruthEye_Impl_Load_Version(const char *json_buff);
+    TIANLI_TRUTHEYE_API bool TianLiTruthEye_Impl_Free();
+#endif
     TIANLI_TRUTHEYE_API void TianLiTruthEye_CreateWindow();
     TIANLI_TRUTHEYE_API void TianLiTruthEye_DestroyWindow();
     TIANLI_TRUTHEYE_API void TianLiTruthEye_ShowWindow();

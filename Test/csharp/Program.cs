@@ -48,8 +48,8 @@ namespace TianLiTruthEye.csharp.test
         static void Main(string[] args)
         {
             // call
-            TruthEye.CreateWindow();
-            TruthEye.ShowWindow();
+            TruthEyeInface.CreateWindow();
+            TruthEyeInface.ShowWindow();
 
 
 
@@ -72,12 +72,10 @@ namespace TianLiTruthEye.csharp.test
                 objs[0].points[0].x++;
                 string json = format_json(objs);
                 byte[] json_buff = System.Text.Encoding.Default.GetBytes(json);
-                TruthEye.SetJsonParams(json_buff, json_buff.Length);
+                TruthEyeInface.SetJsonParams(json_buff, json_buff.Length);
                 System.Threading.Thread.Sleep(50);
                 Console.WriteLine(json);
             }
-
-
 
 
             // wait
@@ -88,12 +86,8 @@ namespace TianLiTruthEye.csharp.test
 
 
 
-
-
-
-
-            TruthEye.HideWindow();
-            TruthEye.DestroyWindow();
+            TruthEyeInface.HideWindow();
+            TruthEyeInface.DestroyWindow();
             // return
         }
     }

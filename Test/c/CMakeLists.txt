@@ -8,7 +8,7 @@ project(TianLi.TruthEye.c.test)
 add_executable (${PROJECT_NAME} "main.cpp")
 
 # 添加依赖项
-target_link_libraries(${PROJECT_NAME} TianLi.TruthEye)
+target_link_libraries(${PROJECT_NAME} TianLi.TruthEye.Inface)
 
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
