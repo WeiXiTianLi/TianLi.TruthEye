@@ -141,7 +141,7 @@ namespace TianLi
         {
             LibPath = libPath;
             if (LibPtr != IntPtr.Zero) return false;
-            LibPtr = LoadLibraryExW(LibPath, IntPtr.Zero, LoadLibraryFlags.LOAD_WITH_ALTERED_SEARCH_PATH);
+            LibPtr = LoadLibraryW(LibPath);
             if (LibPtr == IntPtr.Zero) return false;
             return Apis.LoadApis(LibPtr, GetProcAddress);
         }
@@ -197,23 +197,7 @@ namespace TianLi
         }
 
         [DllImport("kernel32.dll")]
-        public static extern IntPtr LoadLibraryW(string path);
-
-        [System.Flags]
-        public enum LoadLibraryFlags : uint
-        {
-            DONT_RESOLVE_DLL_REFERENCES = 0x00000001,
-            LOAD_IGNORE_CODE_AUTHZ_LEVEL = 0x00000010,
-            LOAD_LIBRARY_AS_DATAFILE = 0x00000002,
-            LOAD_LIBRARY_AS_DATAFILE_EXCLUSIVE = 0x00000040,
-            LOAD_LIBRARY_AS_IMAGE_RESOURCE = 0x00000020,
-            LOAD_WITH_ALTERED_SEARCH_PATH = 0x00000008,
-            LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR = 0x00000100,
-            LOAD_LIBRARY_SEARCH_SYSTEM32 = 0x00000800,
-            LOAD_LIBRARY_SEARCH_DEFAULT_DIRS = 0x00001000
-        }
-        [DllImport("kernel32.dll", EntryPoint = "LoadLibraryExW", SetLastError = true)]
-        public static extern System.IntPtr LoadLibraryExW([In()][MarshalAs(System.Runtime.InteropServices.UnmanagedType.LPWStr)] string lpLibFileName, System.IntPtr hFile, LoadLibraryFlags dwFlags);
+        public static extern IntPtr LoadLibraryW([In()][MarshalAs(System.Runtime.InteropServices.UnmanagedType.LPWStr)] string path);
 
         [DllImport("kernel32.dll")]
         public static extern bool FreeLibrary(IntPtr lib);
