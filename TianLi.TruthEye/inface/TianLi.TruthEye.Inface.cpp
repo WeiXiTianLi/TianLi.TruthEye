@@ -210,11 +210,8 @@ void TianLiTruthEye_CreateWindow()
 {
     if (impl->is_loaded == false)
     {
-        if (TianLiTruthEye_Impl_Load(nullptr, false) == false)
-        {
             return;
         }
-    }
     impl->create_funcptr();
 }
 
