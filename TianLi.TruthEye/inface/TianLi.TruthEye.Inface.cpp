@@ -1,4 +1,4 @@
-// QApp.cpp: 定义动态链接库的实现
+﻿// QApp.cpp: 定义动态链接库的实现
 //
 
 #include "../include/TianLi.TruthEye.h"
@@ -16,12 +16,17 @@
 #include <vector>
 #include <map>
 #include <algorithm>
+#include <fstream>
 // win
 #include <Windows.h>
 // spdlog
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/dup_filter_sink.h>
 #include <spdlog/sinks/rotating_file_sink.h>
+// cpr
+#include <cpr/cpr.h>
+#include <curl/curl.h>
+
 std::string utf8_to_gbk(const std::string &utf8_string)
 {
     std::string ret_string;
@@ -96,6 +101,15 @@ public:
     std::string local_version;
     std::string remote_api = "https://github.com/WeiXiTianLi/TianLi.TruthEye/releases/latest";
     std::string remote_api_chinese = "https://gitee.com/WeiXiTianLi/TianLi.TruthEye/releases/latest";
+    std::string dev_api = "https://download.api.weixitianli.com/TianLi.TruthEye/DownloadUrl";
+
+    std::future<bool> check_update_future;
+    std::future<bool> get_update_info_future;
+    std::future<bool> checkout_version_future;
+    std::future<bool> auto_checkout_version_future;
+    std::future<bool> get_version_future;
+    std::future<bool> async_download_future;
+    std::future<void> async_install_future;
 };
 #define impl lib_impl::get_instance()
 
@@ -210,8 +224,8 @@ void TianLiTruthEye_CreateWindow()
 {
     if (impl->is_loaded == false)
     {
-            return;
-        }
+        return;
+    }
     impl->create_funcptr();
 }
 
@@ -256,12 +270,79 @@ void TianLiTruthEye_SetJsonParams(const char *json_buff, unsigned int buff_size)
     impl->set_funcptr(json_buff, buff_size);
 }
 
-bool TianLiTruthEye_Impl_Check_Update();
+bool TianLiTruthEye_Impl_Check_Update()
+{
+    auto response = cpr::Get(cpr::Url{impl->remote_api});
+    if (response.status_code != 200)
+    {
+        return false;
+    }
+    return true;
+}
 bool TianLiTruthEye_Impl_Get_Update_Info(char *json_buff, unsigned int buff_size);
 bool TianLiTruthEye_Impl_Checkout_Version(char *json_buff, unsigned int buff_size);
 bool TianLiTruthEye_Impl_Auto_Checkout_Version(char *json_buff, unsigned int buff_size,
                                                void (*download_progress)(int, int),
                                                void (*install_progress)(int, int));
 bool TianLiTruthEye_Impl_Get_Version(char *json_buff, unsigned int buff_size);
-void TianLiTruthEye_Impl_Async_Download(void (*progress)(int, int));
-void TianLiTruthEye_Impl_Async_Install(void (*progress)(int, int));
+
+void TianLiTruthEye_Impl_Async_Download(void (*progress)(int, int))
+{
+    auto download_url_response = cpr::Get(cpr::Url{impl->dev_api});
+    if (download_url_response.status_code != 200)
+    {
+        spdlog::warn("获取下载地址失败:{}, url:{}", download_url_response.status_code, impl->dev_api);
+        return;
+    }
+    std::string download_url = download_url_response.text;
+    spdlog::info("获取下载地址成功:{}, url:{}", download_url_response.status_code, download_url);
+
+    if (impl->async_download_future.valid())
+    {
+        // 如果上次下载还没结束，返回失败
+        if (impl->async_download_future.wait_for(std::chrono::microseconds(1)) != std::future_status::ready)
+        {
+            spdlog::warn("上次下载还没结束");
+            return;
+        }
+
+        if (impl->async_download_future.valid() == true)
+        {
+            impl->async_download_future.get();
+        }
+    }
+
+    // 异步下载
+    auto download_func = [download_url, progress]()
+    {
+        auto progress_callback = cpr::ProgressCallback([&](__int64 downloadTotal, __int64 downloadNow, __int64 uploadTotal, __int64 uploadNow, intptr_t userdata) -> bool
+                                                       {
+            progress(downloadNow, downloadTotal);
+            return true; });
+        auto download_response = cpr::Get(cpr::Url{download_url}, cpr::ProgressCallback{progress_callback});
+        if (download_response.status_code != 200)
+        {
+            spdlog::warn("下载失败:{}, url:{}", download_response.status_code, download_url);
+            return false;
+        }
+        if (download_response.text.size() < 1024)
+        {
+            spdlog::warn("下载失败:{}, url:{}", download_response.status_code, download_response.text);
+            return false;
+        }
+
+        spdlog::info("下载成功:{}, url:{}", download_response.status_code, download_url);
+
+        std::string download_file_path = "TianLi.TruthEye.dll";
+        std::ofstream download_file(download_file_path, std::ios::binary);
+        download_file.write(download_response.text.c_str(), download_response.text.size());
+        download_file.close();
+        return true;
+    };
+
+    impl->async_download_future = std::async(std::launch::async, download_func);
+    spdlog::info("开始下载:{}, url:{}", impl->async_download_future.valid(), download_url);
+}
+void TianLiTruthEye_Impl_Async_Install(void (*progress)(int, int))
+{
+}
