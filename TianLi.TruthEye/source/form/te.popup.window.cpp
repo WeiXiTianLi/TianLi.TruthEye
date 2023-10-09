@@ -38,6 +38,7 @@ tePopupWindow::tePopupWindow(QWidget *parent)
     setWindowFlags(Qt::FramelessWindowHint);
     // 设置背景透明
     setAttribute(Qt::WA_TranslucentBackground);
+    SetWindowPos((HWND)this->winId(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
     // 设置窗口置顶
     // setWindowFlags(Qt::WindowStaysOnTopHint);
 
