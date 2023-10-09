@@ -1,5 +1,6 @@
 ﻿// QAppMutRelease.cpp: 定义应用程序的入口点。
 //
+#define TIANLI_TRUTHEYE_IMPL
 #include "../TianLi.TruthEye/include/TianLi.TruthEye.h"
 // std
 #include <thread>
@@ -44,9 +45,17 @@ std::string format_json(std::vector<obj> objs)
     }
     return json_head + json_body + json_tail;
 }
+static void progress(int progress, int total)
+{
+    std::cout << "download progress: " << progress << "/" << total << std::endl;
+}
 
 int main()
 {
+    // TianLiTruthEye_Impl_Async_Download(progress);
+
+    std::string path = "TianLi.TruthEye.dll";
+    TianLiTruthEye_Impl_Load(path.c_str());
     TianLiTruthEye_CreateWindow();
     TianLiTruthEye_ShowWindow();
 
@@ -63,7 +72,7 @@ int main()
         this_thread::sleep_for(100ms);
     }
 
-    this_thread::sleep_for(100ms);
+    this_thread::sleep_for(10000ms);
     // TianLiTruthEye_HideWindow();
     // this_thread::sleep_for(2s);
     // TianLiTruthEye_ShowWindow();
@@ -71,5 +80,6 @@ int main()
     // TianLiTruthEye_HideWindow();
     // this_thread::sleep_for(2s);
     TianLiTruthEye_DestroyWindow();
+    TianLiTruthEye_Impl_Free();
     return 0;
 }
