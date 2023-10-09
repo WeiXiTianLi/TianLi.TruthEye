@@ -1,4 +1,4 @@
-﻿// QApp.cpp: 定义动态链接库的实现
+// QApp.cpp: 定义动态链接库的实现
 //
 
 #include "../include/TianLi.TruthEye.h"
@@ -18,6 +18,39 @@
 #include <algorithm>
 // win
 #include <Windows.h>
+std::string utf8_to_gbk(const std::string &utf8_string)
+{
+    std::string ret_string;
+    int len = MultiByteToWideChar(CP_UTF8, 0, utf8_string.c_str(), -1, NULL, 0);
+    wchar_t *gbk_wstring = new wchar_t[len + 1];
+    memset(gbk_wstring, 0, len * 2 + 2);
+    MultiByteToWideChar(CP_UTF8, 0, utf8_string.c_str(), -1, gbk_wstring, len);
+    len = WideCharToMultiByte(CP_ACP, 0, gbk_wstring, -1, NULL, 0, NULL, NULL);
+    char *gbk_string = new char[len + 1];
+    memset(gbk_string, 0, len + 1);
+    WideCharToMultiByte(CP_ACP, 0, gbk_wstring, -1, gbk_string, len, NULL, NULL);
+    ret_string = gbk_string;
+    delete[] gbk_string;
+    delete[] gbk_wstring;
+    return ret_string;
+}
+
+std::string gbk_to_utf8(const std::string &gbk_string)
+{
+    std::string ret_string;
+    int len = MultiByteToWideChar(CP_ACP, 0, gbk_string.c_str(), -1, NULL, 0);
+    wchar_t *utf8_wstring = new wchar_t[len + 1];
+    memset(utf8_wstring, 0, len * 2 + 2);
+    MultiByteToWideChar(CP_ACP, 0, gbk_string.c_str(), -1, utf8_wstring, len);
+    len = WideCharToMultiByte(CP_UTF8, 0, utf8_wstring, -1, NULL, 0, NULL, NULL);
+    char *utf8_string = new char[len + 1];
+    memset(utf8_string, 0, len + 1);
+    WideCharToMultiByte(CP_UTF8, 0, utf8_wstring, -1, utf8_string, len, NULL, NULL);
+    ret_string = utf8_string;
+    delete[] utf8_string;
+    delete[] utf8_wstring;
+    return ret_string;
+}
 
 class lib_impl
 {
@@ -53,6 +86,30 @@ public:
 };
 #define impl lib_impl::get_instance()
 
+HMODULE Load(std::string libpath)
+{
+    HMODULE libptr = nullptr;
+    // 1. 不转换调用A版本
+    libptr = LoadLibraryA(libpath.c_str());
+    if (libptr != nullptr)
+    {
+        return libptr;
+    }
+    // 2. 转换为utf8调用A版本
+    libptr = LoadLibraryA(gbk_to_utf8(libpath).c_str());
+    if (libptr != nullptr)
+    {
+        return libptr;
+    }
+    // 3. 转换为gbk调用A版本
+    libptr = LoadLibraryA(utf8_to_gbk(libpath).c_str());
+    if (libptr != nullptr)
+    {
+        return libptr;
+    }
+    return nullptr;
+}
+
 bool TianLiTruthEye_Impl_Load(const char *path, bool is_reload)
 {
     if (impl->libptr != nullptr)
@@ -77,7 +134,7 @@ bool TianLiTruthEye_Impl_Load(const char *path, bool is_reload)
     // {
     //     return false;
     // }
-    impl->libptr = LoadLibrary(impl->libpath.c_str());
+    impl->libptr = Load(impl->libpath);
     if (impl->libptr == nullptr)
     {
         return false;
