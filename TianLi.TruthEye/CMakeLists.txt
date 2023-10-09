@@ -20,8 +20,10 @@ add_definitions(-DTIANLI_TRUTHEYE_EXPORTS)
 # 添加本地第三方库
 include_directories("3rdparty")
 include_directories("3rdparty/cpr/include")
+include_directories("3rdparty/spdlog/include")
 # 添加库搜索路径
 link_directories("3rdparty/cpr/lib")
+link_directories("3rdparty/spdlog/lib")
 
 
 
@@ -43,8 +45,8 @@ set_property(TARGET ${PROJECT_NAME} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded
 
 
 # link 3rdparty lib
-target_link_libraries(${PROJECT_NAME} PRIVATE tianli.libcurl Crypt32)
-target_link_libraries(${PROJECT_NAME} PRIVATE tianli.cpr-d)
+target_link_libraries(${PROJECT_NAME} PRIVATE tianli.cpr-d tianli.libcurl-d Crypt32)
+target_link_libraries(${PROJECT_NAME} PRIVATE tianli.spdlog $<$<BOOL:${MSVC}>:ws2_32>)
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Core Qt5::Gui Qt5::Widgets)
 
 # used utf-8 encoding
