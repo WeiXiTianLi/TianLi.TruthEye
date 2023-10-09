@@ -154,9 +154,9 @@ namespace TianLi
             return Apis.FreeApis(LibPtr);
         }
 
-        public bool ImplLoad(bool isReload = false)
+        public bool ImplLoad(byte[] path = null, bool isReload = false)
         {
-            return Apis.ImplLoad(isReload);
+            return Apis.ImplLoad(path, isReload);
         }
 
         public bool ImplLoadVersion(string version)
