@@ -18,6 +18,10 @@
 #include <algorithm>
 // win
 #include <Windows.h>
+// spdlog
+#include <spdlog/spdlog.h>
+#include <spdlog/sinks/dup_filter_sink.h>
+#include <spdlog/sinks/rotating_file_sink.h>
 std::string utf8_to_gbk(const std::string &utf8_string)
 {
     std::string ret_string;
@@ -54,10 +58,19 @@ std::string gbk_to_utf8(const std::string &gbk_string)
 
 class lib_impl
 {
-    lib_impl() = default;
+    lib_impl()
+    {
+        std::vector<spdlog::sink_ptr> sinks;
+        sinks.push_back(std::make_shared<spdlog::sinks::rotating_file_sink_mt>("TianLi.TruthEye.log", 1024 * 1024 * 5, 3));
+        sinks.push_back(std::make_shared<spdlog::sinks::dup_filter_sink_mt>(std::chrono::seconds(5)));
+        auto logger = std::make_shared<spdlog::logger>("TianLi.TruthEye", sinks.begin(), sinks.end());
+        spdlog::set_default_logger(logger);
+        spdlog::flush_every(std::chrono::seconds(1));
+        spdlog::flush_on(spdlog::level::err);
+    }
 
 public:
-    ~lib_impl() = default;
+    ~lib_impl() { spdlog::shutdown(); }
     static lib_impl *get_instance()
     {
         static lib_impl instance;
@@ -88,30 +101,41 @@ public:
 
 HMODULE Load(std::string libpath)
 {
+    impl;
+    spdlog::info("加载Impl: {}", libpath);
+    spdlog::info("可能路径gbk_to_utf8版本:{}", gbk_to_utf8(libpath));
+    spdlog::info("可能路径utf8_to_gbk版本:{}", utf8_to_gbk(libpath));
+
     HMODULE libptr = nullptr;
     // 1. 不转换调用A版本
     libptr = LoadLibraryA(libpath.c_str());
     if (libptr != nullptr)
     {
+        spdlog::info("命中原始版本路径");
         return libptr;
     }
     // 2. 转换为utf8调用A版本
     libptr = LoadLibraryA(gbk_to_utf8(libpath).c_str());
     if (libptr != nullptr)
     {
+        spdlog::info("命中gbk_to_utf8版本路径");
         return libptr;
     }
     // 3. 转换为gbk调用A版本
     libptr = LoadLibraryA(utf8_to_gbk(libpath).c_str());
     if (libptr != nullptr)
     {
+        spdlog::info("命中utf8_to_gbk版本路径");
         return libptr;
     }
+    spdlog::warn("未命中路径");
     return nullptr;
 }
 
 bool TianLiTruthEye_Impl_Load(const char *path, bool is_reload)
 {
+    impl;
+    spdlog::info("加载实现:{}, 重加载:{}", path, is_reload);
     if (impl->libptr != nullptr)
     {
         if (is_reload == false)
@@ -160,10 +184,14 @@ bool TianLiTruthEye_Impl_Load(const char *path, bool is_reload)
 }
 bool TianLiTruthEye_Impl_Load_Version(const char *version)
 {
+    impl;
+    spdlog::info("加载指定版本实现:{}", version);
     return true;
 }
 bool TianLiTruthEye_Impl_Free()
 {
+    impl;
+    spdlog::info("卸载当前实现:{}, 加载情况:{}", impl->libpath, impl->libptr != nullptr);
     if (impl->libptr == nullptr)
     {
         return false;
