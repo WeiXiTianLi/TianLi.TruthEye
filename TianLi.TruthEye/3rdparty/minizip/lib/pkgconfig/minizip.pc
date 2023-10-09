@@ -1,0 +1,14 @@
+prefix=C:\Users\YuSuiXian\source\repos\dev\minizip-ng\build\install
+exec_prefix=C:\Users\YuSuiXian\source\repos\dev\minizip-ng\build\install
+libdir=C:\Users\YuSuiXian\source\repos\dev\minizip-ng\build\install/lib
+sharedlibdir=C:\Users\YuSuiXian\source\repos\dev\minizip-ng\build\install/lib
+includedir=C:\Users\YuSuiXian\source\repos\dev\minizip-ng\build\install/include/minizip
+
+Name: minizip
+Description: Zip manipulation library
+Version: 4.0.1
+
+Requires: zlib
+Libs: -L${libdir} -L${sharedlibdir} -lminizip
+Libs.private:
+Cflags: -I${includedir}
