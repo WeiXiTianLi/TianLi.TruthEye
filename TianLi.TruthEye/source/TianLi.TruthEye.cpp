@@ -21,11 +21,13 @@
 #include <vector>
 #include <map>
 #include <algorithm>
+#include <filesystem>
 // win
 #include <Windows.h>
 // spdlog
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/dup_filter_sink.h>
+#include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/rotating_file_sink.h>
 void init_logger()
 {
@@ -34,13 +36,28 @@ void init_logger()
     {
         return;
     }
+    // 全局日志
     std::vector<spdlog::sink_ptr> sinks;
-    sinks.push_back(std::make_shared<spdlog::sinks::rotating_file_sink_mt>("TianLi.TruthEye.log", 1024 * 1024 * 5, 3));
+    sinks.push_back(std::make_shared<spdlog::sinks::rotating_file_sink_mt>("TianLi.TruthEye.log", 1024 * 1024 * 5, 2));
     sinks.push_back(std::make_shared<spdlog::sinks::dup_filter_sink_mt>(std::chrono::seconds(5)));
     auto logger = std::make_shared<spdlog::logger>("TianLi.TruthEye.Impl", sinks.begin(), sinks.end());
+    // 每次启动的详细日志，每次启动都会清空
+    if (std::filesystem::exists("TianLi.TruthEye.trace.log"))
+    {
+        std::filesystem::remove("TianLi.TruthEye.trace.log");
+    }
+    std::vector<spdlog::sink_ptr> trace_sinks;
+    trace_sinks.push_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>("TianLi.TruthEye.trace.log"));
+    trace_sinks.push_back(std::make_shared<spdlog::sinks::dup_filter_sink_mt>(std::chrono::seconds(5)));
+    auto track_logger = std::make_shared<spdlog::logger>("trace", trace_sinks.begin(), trace_sinks.end());
+    track_logger->set_level(spdlog::level::trace);
+    // 注册
+    spdlog::register_logger(track_logger);
+    // 设置日志
     spdlog::set_default_logger(logger);
     spdlog::flush_every(std::chrono::seconds(1));
     spdlog::flush_on(spdlog::level::warn);
+    is_inited = true;
 }
 static QApplication *g_app = nullptr;
 static tePopupWindow *g_window = nullptr;
