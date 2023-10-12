@@ -45,6 +45,12 @@ namespace TianLiTruthEye.csharp.test
             return json_head + json_body + json_tail;
         }
         // main function
+
+        static public void progress(int current, int total)
+        {
+            Console.WriteLine("progress: " + current + "/" + total);
+        }
+
         static void Main(string[] args)
         {
             // call
@@ -81,6 +87,8 @@ namespace TianLiTruthEye.csharp.test
             TruthEyeInface.HideWindow();
             TruthEyeInface.DestroyWindow();
             // return
+
+            TruthEyeInface.ImplAsyncDownload(progress);
         }
     }
 }

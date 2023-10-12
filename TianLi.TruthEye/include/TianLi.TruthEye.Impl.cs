@@ -11,6 +11,9 @@ namespace TianLi
 {
     public class TruthEyeApis
     {
+        // void (* progress)(int, int)
+        public delegate void Progress_Type(int current, int total);
+        public delegate bool ImplAsyncDownload_Type(Progress_Type progress);
         public delegate bool ImplLoad_Type(byte[] path = null, bool isReload = false);
         public delegate bool ImplLoadVersion_Type(byte[] version);
         public delegate bool ImplFree_Type();
@@ -20,6 +23,7 @@ namespace TianLi
         public delegate bool HideWindow_Type();
         public delegate bool SetJsonParams_Type(byte[] json_buff, int buff_size);
 
+        public IntPtr TianLiTruthEye_Impl_Async_Download_Func = IntPtr.Zero;
         public IntPtr TianLiTruthEye_Impl_Load_Func = IntPtr.Zero;
         public IntPtr TianLiTruthEye_Impl_Load_Version_Func = IntPtr.Zero;
         public IntPtr TianLiTruthEye_Impl_Free_Func = IntPtr.Zero;
@@ -69,6 +73,13 @@ namespace TianLi
             }
             IsLoad = false;
             return true;
+        }
+
+        public void ImplAsyncDownload(Progress_Type progress)
+        {
+            if (TianLiTruthEye_Impl_Async_Download_Func == IntPtr.Zero) return;
+            ImplAsyncDownload_Type func = (ImplAsyncDownload_Type)Marshal.GetDelegateForFunctionPointer(TianLiTruthEye_Impl_Async_Download_Func, typeof(ImplAsyncDownload_Type));
+            func(progress);
         }
 
         public bool ImplLoad(byte[] path = null, bool isReload = false)
@@ -152,6 +163,11 @@ namespace TianLi
             bool ret = FreeLibrary(LibPtr);
             if (ret) LibPtr = IntPtr.Zero;
             return Apis.FreeApis(LibPtr);
+        }
+
+        public void ImplAsyncDownload(TruthEyeApis.Progress_Type progress)
+        {
+            Apis.ImplAsyncDownload(progress);
         }
 
         public bool ImplLoad(byte[] path = null, bool isReload = false)
