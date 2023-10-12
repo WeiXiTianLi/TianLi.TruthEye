@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #ifdef TIANLI_TRUTHEYE_EXPORTS
 #define TIANLI_TRUTHEYE_API __declspec(dllexport)
 #else
@@ -31,6 +31,7 @@ extern "C"
     TIANLI_TRUTHEYE_API bool TianLiTruthEye_Impl_Load_Version(const char *version);
     TIANLI_TRUTHEYE_API bool TianLiTruthEye_Impl_Free();
 #endif
+    TIANLI_TRUTHEYE_API void TianLiTruthEye_Version(const char *version_buff, unsigned int buff_size);
     TIANLI_TRUTHEYE_API void TianLiTruthEye_CreateWindow();
     TIANLI_TRUTHEYE_API void TianLiTruthEye_DestroyWindow();
     TIANLI_TRUTHEYE_API void TianLiTruthEye_ShowWindow();
