@@ -66,7 +66,7 @@ class lib_impl
     lib_impl()
     {
         std::vector<spdlog::sink_ptr> sinks;
-        sinks.push_back(std::make_shared<spdlog::sinks::rotating_file_sink_mt>("TianLi.TruthEye.log", 1024 * 1024 * 5, 3));
+        sinks.push_back(std::make_shared<spdlog::sinks::rotating_file_sink_mt>("TianLi.TruthEye.log", 1024 * 1024 * 5, 2));
         sinks.push_back(std::make_shared<spdlog::sinks::dup_filter_sink_mt>(std::chrono::seconds(5)));
         auto logger = std::make_shared<spdlog::logger>("TianLi.TruthEye", sinks.begin(), sinks.end());
         spdlog::set_default_logger(logger);
