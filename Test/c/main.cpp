@@ -60,8 +60,8 @@ int main()
     TianLiTruthEye_ShowWindow();
 
     std::vector<obj> objs;
-    objs.push_back({"风晶蝶", "http://assets.yuanshen.site/icons/59.png", {{10, 10}, {12, 12}}});
-    objs.push_back({"宝箱", "http://assets.yuanshen.site/icons/59.png", {{20, 30}}});
+    objs.push_back({"风晶蝶", "https://tiles.yuanshen.site/d/marker_image/icons/%E6%B5%8B%E8%AF%95%E5%9B%BE%E6%A0%871.png", {{10, 10}, {12, 12}}});
+    objs.push_back({"宝箱", "https://tiles.yuanshen.site/d/marker_image/icons/%E6%B5%8B%E8%AF%95%E5%9B%BE%E6%A0%871.png", {{20, 30}}});
     //
 
     for (int i = 0; i < 10; i++)
@@ -71,6 +71,11 @@ int main()
         TianLiTruthEye_SetJsonParams(json_str.c_str(), json_str.size());
         this_thread::sleep_for(100ms);
     }
+    std::string test = R"({"version": "1.0.1","type" : "update","content" : [{"name": "item","url" : "https://tiles.yuanshen.site/d/marker_image/icons/%E6%B5%8B%E8%AF%95%E5%9B%BE%E6%A0%871.png","points" : [{"x": 14,"y" : -8}],"content_info" : {
+  "text": "这是一个【完成雷霆探针解密】后携带雷种子使用雷极飞到空中获得的【散失的雷神瞳】",
+  "picture_url": "https://yuanshen.site/comment_png/288_48.jpg"
+}}]})";
+    TianLiTruthEye_SetJsonParams(test.c_str(), test.size());
 
     this_thread::sleep_for(10000ms);
     // TianLiTruthEye_HideWindow();
