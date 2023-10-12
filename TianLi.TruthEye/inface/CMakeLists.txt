@@ -1,7 +1,7 @@
 ﻿# CMakeList.txt: QAppMutRelease 的 CMake 项目，在此处包括源代码并定义
 # 项目特定的逻辑。
 #
-project(TianLi.TruthEye.Inface)
+project(TianLi.TruthEye.Inface VERSION 1.0.0)
 
 # define 
 add_definitions(-DTIANLI_TRUTHEYE_EXPORTS)
@@ -23,11 +23,16 @@ link_directories("../3rdparty/spdlog/lib")
 ## include minizip
 #link_directories(${minizip_SOURCE_DIR})
 
+if(MSVC)
+    set(VERSION_RC "${CMAKE_BINARY_DIR}/impl.version.rc")
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/inface.version.rc.in
+                   "${VERSION_RC}")
+endif()
 set(MSVC_RUNTIME_LIBRARY "MultiThreaded")
 
 # vcpkg
 # 将源代码添加到此项目的可执行文件。
-add_library(${PROJECT_NAME} SHARED 
+add_library(${PROJECT_NAME} SHARED ${VERSION_RC}
 	"TianLi.TruthEye.Inface.cpp" 
 )
 
