@@ -1,4 +1,4 @@
-ï»¿// QAppMutRelease.cpp: å®šä¹‰åº”ç”¨ç¨‹åºçš„å…¥å£ç‚¹ã€‚
+// QAppMutRelease.cpp: ¶¨ÒåÓ¦ÓÃ³ÌĞòµÄÈë¿Úµã¡£
 //
 #define TIANLI_TRUTHEYE_IMPL
 #include "../TianLi.TruthEye/include/TianLi.TruthEye.h"
@@ -60,8 +60,8 @@ int main()
     TianLiTruthEye_ShowWindow();
 
     std::vector<obj> objs;
-    objs.push_back({"é£æ™¶è¶", "https://tiles.yuanshen.site/d/marker_image/icons/%E6%B5%8B%E8%AF%95%E5%9B%BE%E6%A0%871.png", {{10, 10}, {12, 12}}});
-    objs.push_back({"å®ç®±", "https://tiles.yuanshen.site/d/marker_image/icons/%E6%B5%8B%E8%AF%95%E5%9B%BE%E6%A0%871.png", {{20, 30}}});
+    objs.push_back({"·ç¾§µû", "https://tiles.yuanshen.site/d/marker_image/icons/%E6%B5%8B%E8%AF%95%E5%9B%BE%E6%A0%871.png", {{10, 10}, {12, 12}}});
+    objs.push_back({"±¦Ïä", "https://tiles.yuanshen.site/d/marker_image/icons/%E6%B5%8B%E8%AF%95%E5%9B%BE%E6%A0%871.png", {{20, 30}}});
     //
 
     for (int i = 0; i < 10; i++)
@@ -72,12 +72,12 @@ int main()
         this_thread::sleep_for(100ms);
     }
     std::string test = R"({"version": "1.0.1","type" : "update","content" : [{"name": "item","url" : "https://tiles.yuanshen.site/d/marker_image/icons/%E6%B5%8B%E8%AF%95%E5%9B%BE%E6%A0%871.png","points" : [{"x": 14,"y" : -8}],"content_info" : {
-  "text": "è¿™æ˜¯ä¸€ä¸ªã€å®Œæˆé›·éœ†æ¢é’ˆè§£å¯†ã€‘åæºå¸¦é›·ç§å­ä½¿ç”¨é›·æé£åˆ°ç©ºä¸­è·å¾—çš„ã€æ•£å¤±çš„é›·ç¥ç³ã€‘",
+  "text": "ÕâÊÇÒ»¸ö¡¾Íê³ÉÀ×öªÌ½Õë½âÃÜ¡¿ºóĞ¯´øÀ×ÖÖ×ÓÊ¹ÓÃÀ×¼«·Éµ½¿ÕÖĞ»ñµÃµÄ¡¾É¢Ê§µÄÀ×ÉñÍ«¡¿",
   "picture_url": "https://yuanshen.site/comment_png/288_48.jpg"
 }}]})";
     TianLiTruthEye_SetJsonParams(test.c_str(), test.size());
 
-    this_thread::sleep_for(10000ms);
+    this_thread::sleep_for(2000ms);
     // TianLiTruthEye_HideWindow();
     // this_thread::sleep_for(2s);
     // TianLiTruthEye_ShowWindow();

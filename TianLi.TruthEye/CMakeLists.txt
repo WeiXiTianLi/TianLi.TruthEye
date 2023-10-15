@@ -5,9 +5,10 @@ project(TianLi.TruthEye VERSION 1.0.0)
 
 # 该项目为静态链接Qt5的动态链接库
 # Qt5
-set(Qt5_DIR "E:/Qt/5.15.7/msvc2019_64_static/lib/cmake/Qt5")
-#set(Qt5_DIR "C:/Qt/5.15.2/msvc2019_64/lib/cmake/Qt5")
-find_package(Qt5 REQUIRED COMPONENTS Core Gui Widgets )
+set(Qt5VER "qt-5.15.2-lite-release-static")
+set(Qt5_DIR "${ThridPatryDir}/${Qt5VER}/lib/cmake/Qt5")
+#set(Qt5_DIR "E:/Qt/5.15.7/msvc2019_64_static/lib/cmake/Qt5")
+find_package(Qt5 COMPONENTS Core Gui Widgets FbSupport FontDatabaseSupport  REQUIRED)
 #
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
@@ -46,30 +47,20 @@ add_library(${PROJECT_NAME} SHARED ${VERSION_RC}
 #set_target_properties(${PROJECT_NAME}  PROPERTIES INTERFACE_LINK_LIBRARIES "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 #set_property(TARGET ${PROJECT_NAME} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreadedDebug")
-set_property(TARGET ${PROJECT_NAME} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreadedDebug")
+set_property(TARGET ${PROJECT_NAME} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded")
 
 
 
 
 # link 3rdparty lib
-target_link_libraries(${PROJECT_NAME} PRIVATE tianli.cpr-d tianli.libcurl-d Crypt32)
+target_link_libraries(${PROJECT_NAME} PRIVATE tianli.cpr tianli.libcurl Crypt32)
 target_link_libraries(${PROJECT_NAME} PRIVATE tianli.spdlog $<$<BOOL:${MSVC}>:ws2_32>)
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Core Qt5::Gui Qt5::Widgets)
+# show all qt5 module
+message(STATUS "Qt5::Core: ${Qt5Core_VERSION}")
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Core Qt5::Gui Qt5::Widgets )
 
 # used utf-8 encoding
 target_compile_options(${PROJECT_NAME} PRIVATE "/utf-8")
 
 add_subdirectory(inface)
-
-if (CMAKE_VERSION VERSION_GREATER 3.12)
-  set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 20)
-endif()
-
-# TODO: 如有需要，请添加测试并安装目标。
-
-# 安装Qt依赖
-# install(DIRECTORY ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
-# install(FILES $<TARGET_FILE:Qt5::Core> DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
-# install(FILES $<TARGET_FILE:Qt5::Gui> DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
-# install(FILES $<TARGET_FILE:Qt5::Widgets> DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 
