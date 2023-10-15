@@ -45,5 +45,5 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: TianLi.TruthEye
-        path: ${{github.workspace}}/build/TianLi.TruthEye/Release/
+        path: ${{github.workspace}}/build/bin/Release/
         if-no-files-found: 'warn'
