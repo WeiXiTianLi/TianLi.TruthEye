@@ -35,7 +35,7 @@ jobs:
       run: |
         $version = (Get-Content -Path ${{github.workspace}}/build/bin/Release/version -TotalCount 1).Trim()
         echo "dll version: $version"
-        echo "::set-output name=_version::$version"
+        echo "_version=$version" >> $GITHUB_OUTPUT
 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3
