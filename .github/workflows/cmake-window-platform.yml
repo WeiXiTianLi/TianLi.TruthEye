@@ -34,10 +34,11 @@ jobs:
       working-directory: ${{github.workspace}}/build
       run: ctest -C ${{env.BUILD_TYPE}}
 
-    - name: Get the version
+    - name: Get the Version
       id: get_version
       run: |
         $version = (Get-Content -Path ${{github.workspace}}/build/bin/Release/version -TotalCount 1).Trim()
+        echo "dll version: $version"
         echo "version=$version" >> "$GITHUB_OUTPUT"
 
     - name: Upload a Build Artifact
