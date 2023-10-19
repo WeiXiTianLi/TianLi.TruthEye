@@ -1,4 +1,4 @@
-﻿// QApp.cpp: 定义动态链接库的实现
+// QApp.cpp: 定义动态链接库的实现
 //
 
 #include "../include/TianLi.TruthEye.h"
@@ -24,6 +24,7 @@
 #include <filesystem>
 // win
 #include <Windows.h>
+#include <winver.h>
 // spdlog
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/dup_filter_sink.h>
@@ -80,6 +81,31 @@ static void CreateQApplication()
     g_app->exec();
     spdlog::info("窗口事件循环结束");
     spdlog::shutdown();
+}
+
+void TianLiTruthEye_Version(const char *version_buff, unsigned int buff_size)
+{
+    auto size = GetFileVersionInfoSizeA("TianLi.TruthEye.dll", NULL);
+    if (size == 0)
+    {
+        return;
+    }
+    std::vector<char> buff(size);
+    if (!GetFileVersionInfoA("TianLi.TruthEye.dll", NULL, size, buff.data()))
+    {
+        return;
+    }
+    VS_FIXEDFILEINFO *pFileInfo = NULL;
+    UINT uLen = 0;
+    if (!VerQueryValueA(buff.data(), "\\", (LPVOID *)&pFileInfo, &uLen))
+    {
+        return;
+    }
+    if (pFileInfo == NULL)
+    {
+        return;
+    }
+    sprintf_s((char *)version_buff, buff_size, "%d.%d.%d.%d", HIWORD(pFileInfo->dwFileVersionMS), LOWORD(pFileInfo->dwFileVersionMS), HIWORD(pFileInfo->dwFileVersionLS), LOWORD(pFileInfo->dwFileVersionLS));
 }
 
 void TianLiTruthEye_CreateWindow()
