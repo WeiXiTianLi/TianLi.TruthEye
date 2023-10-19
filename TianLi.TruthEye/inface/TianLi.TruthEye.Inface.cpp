@@ -84,12 +84,14 @@ public:
 
 public:
     HMODULE libptr = nullptr;
+    typedef void (*version_func_type)(const char *, unsigned int);
     typedef void (*create_func_type)();
     typedef void (*destroy_func_type)();
     typedef void (*show_func_type)();
     typedef void (*hide_func_type)();
     typedef void (*set_func_type)(const char *, unsigned int);
 
+    version_func_type version_funcptr = nullptr;
     create_func_type create_funcptr = nullptr;
     destroy_func_type destroy_funcptr = nullptr;
     show_func_type show_funcptr = nullptr;
@@ -177,15 +179,17 @@ bool TianLiTruthEye_Impl_Load(const char *path, bool is_reload)
     {
         return false;
     }
+    impl->version_funcptr = (lib_impl::version_func_type)GetProcAddress(impl->libptr, "TianLiTruthEye_Version");
     impl->create_funcptr = (lib_impl::create_func_type)GetProcAddress(impl->libptr, "TianLiTruthEye_CreateWindow");
     impl->destroy_funcptr = (lib_impl::destroy_func_type)GetProcAddress(impl->libptr, "TianLiTruthEye_DestroyWindow");
     impl->show_funcptr = (lib_impl::show_func_type)GetProcAddress(impl->libptr, "TianLiTruthEye_ShowWindow");
     impl->hide_funcptr = (lib_impl::hide_func_type)GetProcAddress(impl->libptr, "TianLiTruthEye_HideWindow");
     impl->set_funcptr = (lib_impl::set_func_type)GetProcAddress(impl->libptr, "TianLiTruthEye_SetJsonParams");
-    if (impl->create_funcptr == nullptr || impl->destroy_funcptr == nullptr || impl->show_funcptr == nullptr || impl->hide_funcptr == nullptr || impl->set_funcptr == nullptr)
+    if (impl->version_funcptr == nullptr || impl->create_funcptr == nullptr || impl->destroy_funcptr == nullptr || impl->show_funcptr == nullptr || impl->hide_funcptr == nullptr || impl->set_funcptr == nullptr)
     {
         FreeLibrary(impl->libptr);
         impl->libptr = nullptr;
+        impl->version_funcptr = nullptr;
         impl->create_funcptr = nullptr;
         impl->destroy_funcptr = nullptr;
         impl->show_funcptr = nullptr;
@@ -212,6 +216,7 @@ bool TianLiTruthEye_Impl_Free()
     }
     FreeLibrary(impl->libptr);
     impl->libptr = nullptr;
+    impl->version_funcptr = nullptr;
     impl->create_funcptr = nullptr;
     impl->destroy_funcptr = nullptr;
     impl->show_funcptr = nullptr;
@@ -220,6 +225,15 @@ bool TianLiTruthEye_Impl_Free()
     impl->is_loaded = false;
     return true;
 }
+void TianLiTruthEye_Version(const char *version_buff, unsigned int buff_size)
+{
+    if (impl->is_loaded == false)
+    {
+        return;
+    }
+    impl->version_funcptr(version_buff, buff_size);
+}
+
 void TianLiTruthEye_CreateWindow()
 {
     if (impl->is_loaded == false)
