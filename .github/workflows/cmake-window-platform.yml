@@ -44,10 +44,47 @@ jobs:
         path: ${{github.workspace}}/build/bin/Release/
         if-no-files-found: 'warn'
 
-  release:
-    # only run in master branch
+  create-release-version:
     if: github.ref == 'refs/heads/master'
     needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Check Version Exist
+      id: check_version_exist
+      env:
+        Version: ${{ needs.build.outputs.version }}
+      run: |
+        version=$env:Version
+        echo "version: $version"
+        git fetch --tags
+        if git rev-parse $version >/dev/null 2>&1
+        then
+          echo "version $version exist"
+          exit 1
+        else
+          echo "version $version not exist"
+          exit 0
+        fi
+    - name: Create Release Version
+      if: steps.check_version_exist.outcome == 'success'
+      id: create_release_version
+      uses: actions/create-release@v1
+      env:
+        Version: ${{ needs.build.outputs.version }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ env.Version }}
+        release_name: Release ${{ env.Version }}
+        draft: false
+        prerelease: false
+
+
+
+  release-impl:
+    # only run in master branch
+    if: github.ref == 'refs/heads/master' && {{always()}}
+    needs: create-release-version
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v3
@@ -83,8 +120,8 @@ jobs:
     
   release-inface:
     # only run in master branch
-    if: github.ref == 'refs/heads/master'
-    needs: build
+    if: github.ref == 'refs/heads/master' && {{always()}}
+    needs: create-release-version
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v3
