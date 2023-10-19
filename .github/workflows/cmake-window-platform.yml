@@ -84,7 +84,7 @@ jobs:
   release-impl:
     # only run in master branch
     if: github.ref == 'refs/heads/master' && ${{ always() }}
-    needs: create-release-version
+    needs: [ build, create-release-version ]
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v3
@@ -121,7 +121,7 @@ jobs:
   release-inface:
     # only run in master branch
     if: github.ref == 'refs/heads/master' && ${{ always() }}
-    needs: create-release-version
+    needs: [ build, create-release-version ]
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v3
