@@ -83,7 +83,7 @@ jobs:
 
   release-impl:
     # only run in master branch
-    if: github.ref == 'refs/heads/master' && {{always()}}
+    if: github.ref == 'refs/heads/master' && ${{ always() }}
     needs: create-release-version
     runs-on: windows-latest
     steps:
@@ -120,7 +120,7 @@ jobs:
     
   release-inface:
     # only run in master branch
-    if: github.ref == 'refs/heads/master' && {{always()}}
+    if: github.ref == 'refs/heads/master' && ${{ always() }}
     needs: create-release-version
     runs-on: windows-latest
     steps:
