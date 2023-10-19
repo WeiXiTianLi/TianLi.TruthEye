@@ -59,7 +59,6 @@ jobs:
         path: ${{github.workspace}}/Release/
 
     - name: Create Release
-
       id: create_release
       uses: actions/create-release@v1
       env:
@@ -80,4 +79,41 @@ jobs:
         asset_path: ${{github.workspace}}/Release/TianLi.TruthEye.dll
         asset_name: TianLi.TruthEye.dll
         asset_content_type: application/x-msdownload
+        
     
+  release-inface:
+    # only run in master branch
+    if: github.ref == 'refs/heads/master'
+    needs: build
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Download a Build Artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: TianLi.TruthEye
+        path: ${{github.workspace}}/Release/
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        Version: ${{ needs.build.outputs.version }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ env.Version }}
+        release_name: Release ${{ env.Version }}
+        draft: false
+        prerelease: false
+
+    - name: Upload a Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ${{github.workspace}}/Release/TianLi.TruthEye.Inface.dll
+        asset_name: TianLi.TruthEye.Inface.dll
+        asset_content_type: application/x-msdownload
+        
