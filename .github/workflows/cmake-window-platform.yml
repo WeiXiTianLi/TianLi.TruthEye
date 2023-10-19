@@ -38,7 +38,7 @@ jobs:
       id: get_version
       run: |
         $version = (Get-Content -Path ${{github.workspace}}/build/bin/Release/version -TotalCount 1).Trim()
-        echo "::set-output name=version::$version"
+        echo "version=$version" >> "$GITHUB_OUTPUT"
 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3
@@ -69,8 +69,8 @@ jobs:
         Version: ${{ needs.build.outputs.version }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
+        tag_name: ${{ env.Version }}
+        release_name: Release ${{ env.Version }}
         draft: false
         prerelease: false
 
