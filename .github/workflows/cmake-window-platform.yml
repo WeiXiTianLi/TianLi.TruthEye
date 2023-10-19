@@ -44,30 +44,21 @@ jobs:
         path: ${{github.workspace}}/build/bin/Release/
         if-no-files-found: 'warn'
 
-  create-release-version:
+  release:
+    # only run in master branch
     if: github.ref == 'refs/heads/master'
     needs: build
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Check Version Exist
-      id: check_version_exist
-      env:
-        Version: ${{ needs.build.outputs.version }}
-      run: |
-        echo "version: $env:Version"
-        git fetch --tags
-        if git rev-parse $env:Version >/dev/null 2>&1
-        then
-          echo "version $env:Version exist"
-          exit 1
-        else
-          echo "version $env:Version not exist"
-          exit 0
-        fi
-    - name: Create Release Version
-      if: steps.check_version_exist.outcome == 'success'
-      id: create_release_version
+    - name: Download a Build Artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: TianLi.TruthEye
+        path: ${{github.workspace}}/Release/
+
+    - name: Create Release
+
+      id: create_release
       uses: actions/create-release@v1
       env:
         Version: ${{ needs.build.outputs.version }}
@@ -78,21 +69,6 @@ jobs:
         draft: false
         prerelease: false
 
-
-  release-impl:
-    # only run in master branch
-    if: github.ref == 'refs/heads/master' && ${{ always() }}
-    needs: [ build, create-release-version ]
-    runs-on: windows-latest
-    steps:
-    - uses: actions/checkout@v3
-    
-    - name: Download a Build Artifact
-      uses: actions/download-artifact@v3
-      with:
-        name: TianLi.TruthEye
-        path: ${{github.workspace}}/Release/
-
     - name: Upload a Release Asset
       uses: actions/upload-release-asset@v1
       env:
@@ -102,23 +78,8 @@ jobs:
         asset_path: ${{github.workspace}}/Release/TianLi.TruthEye.dll
         asset_name: TianLi.TruthEye.dll
         asset_content_type: application/x-msdownload
-        
-    
-  release-inface:
-    # only run in master branch
-    if: github.ref == 'refs/heads/master' && ${{ always() }}
-    needs: [ build, create-release-version ]
-    runs-on: windows-latest
-    steps:
-    - uses: actions/checkout@v3
-    
-    - name: Download a Build Artifact
-      uses: actions/download-artifact@v3
-      with:
-        name: TianLi.TruthEye
-        path: ${{github.workspace}}/Release/
 
-    - name: Upload a Release Asset
+    - name: Upload a Inface Release Asset
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -127,4 +88,5 @@ jobs:
         asset_path: ${{github.workspace}}/Release/TianLi.TruthEye.Inface.dll
         asset_name: TianLi.TruthEye.Inface.dll
         asset_content_type: application/x-msdownload
+
         
