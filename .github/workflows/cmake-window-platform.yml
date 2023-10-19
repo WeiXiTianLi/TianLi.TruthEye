@@ -33,9 +33,9 @@ jobs:
     - name: Get the Version
       id: get_version
       run: |
-        $version = (Get-Content -Path ${{github.workspace}}/build/bin/Release/version -TotalCount 1).Trim()
-        echo "dll version: $version"
-        echo "version_env=$version" >> $GITHUB_OUTPUT
+        $version_str = (Get-Content -Path ${{github.workspace}}/build/bin/Release/version -TotalCount 1).Trim()
+        echo "dll version: $version_str"
+        echo "version_env=$version_str" >> $GITHUB_OUTPUT
 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3
