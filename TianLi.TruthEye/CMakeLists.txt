@@ -1,7 +1,7 @@
 ﻿# CMakeList.txt: QAppMutRelease 的 CMake 项目，在此处包括源代码并定义
 # 项目特定的逻辑。
 #
-project(TianLi.TruthEye VERSION 1.1.0)
+project(TianLi.TruthEye VERSION 1.1.1)
 
 # 该项目为静态链接Qt5的动态链接库
 # Qt5
@@ -63,4 +63,10 @@ target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Core Qt5::Gui Qt5::Widgets )
 target_compile_options(${PROJECT_NAME} PRIVATE "/utf-8")
 
 add_subdirectory(inface)
+
+# copy version.rc to output dir
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different
+		"${CMAKE_CURRENT_SOURCE_DIR}/source/version"
+		$<TARGET_FILE_DIR:${PROJECT_NAME}>)
 

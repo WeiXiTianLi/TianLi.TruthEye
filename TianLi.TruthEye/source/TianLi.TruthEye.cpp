@@ -87,25 +87,20 @@ void TianLiTruthEye_Version(const char *version_buff, unsigned int buff_size)
 {
     auto size = GetFileVersionInfoSizeA("TianLi.TruthEye.dll", NULL);
     if (size == 0)
-    {
         return;
-    }
+
     std::vector<char> buff(size);
     if (!GetFileVersionInfoA("TianLi.TruthEye.dll", NULL, size, buff.data()))
-    {
         return;
-    }
     VS_FIXEDFILEINFO *pFileInfo = NULL;
     UINT uLen = 0;
     if (!VerQueryValueA(buff.data(), "\\", (LPVOID *)&pFileInfo, &uLen))
-    {
         return;
-    }
     if (pFileInfo == NULL)
-    {
         return;
-    }
-    sprintf_s((char *)version_buff, buff_size, "%d.%d.%d.%d", HIWORD(pFileInfo->dwFileVersionMS), LOWORD(pFileInfo->dwFileVersionMS), HIWORD(pFileInfo->dwFileVersionLS), LOWORD(pFileInfo->dwFileVersionLS));
+    sprintf_s((char *)version_buff, buff_size, "%d.%d.%d", HIWORD(pFileInfo->dwFileVersionMS), LOWORD(pFileInfo->dwFileVersionMS), HIWORD(pFileInfo->dwFileVersionLS));
+
+    spdlog::info("悬浮窗版本: {}", version_buff);
 }
 
 void TianLiTruthEye_CreateWindow()
