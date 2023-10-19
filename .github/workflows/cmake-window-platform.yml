@@ -16,7 +16,7 @@ jobs:
   build:
     runs-on: windows-latest
     outputs:
-      version: ${{ steps.get_version.outputs.VERSION }}
+      version: ${{ steps.get_version.outputs._version }}
 
     steps:
     - uses: actions/checkout@v3
@@ -33,9 +33,9 @@ jobs:
     - name: Get the Version
       id: get_version
       run: |
-        $version_str = (Get-Content -Path ${{github.workspace}}/build/bin/Release/version -TotalCount 1).Trim()
-        echo "dll version: $version_str"
-        echo "VERSION=$version_str" >> $GITHUB_OUTPUT
+        $version = (Get-Content -Path ${{github.workspace}}/build/bin/Release/version -TotalCount 1).Trim()
+        echo "dll version: $version"
+        echo "_version=$version" >> $$env:GITHUB_OUTPUT
 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3
