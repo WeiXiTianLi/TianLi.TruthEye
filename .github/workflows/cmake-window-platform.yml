@@ -14,9 +14,6 @@ env:
 
 jobs:
   build:
-    # The CMake configure and build commands are platform agnostic and should work equally well on Windows or Mac.
-    # You can convert this to a matrix build if you need cross-platform coverage.
-    # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
     runs-on: windows-latest
 
     steps:
@@ -41,28 +38,20 @@ jobs:
         name: TianLi.TruthEye
         path: ${{github.workspace}}/build/bin/Release/
         if-no-files-found: 'warn'
-        
+
   release:
+    # only run in master branch
+    if: github.ref == 'refs/heads/master'
     needs: build
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v3
-
-    - name: Clone third party submodule
-      run: git submodule update --init --recursive
-
-    - name: Configure CMake
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
-
-    - name: Build
-      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
-
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v3
+    
+    - name: Download a Build Artifact
+      uses: actions/download-artifact@v3
       with:
         name: TianLi.TruthEye
-        path: ${{github.workspace}}/build/bin/Release/
-        if-no-files-found: 'warn'
+        path: ${{github.workspace}}/Release/
 
     - name: Create Release
       id: create_release
@@ -74,4 +63,14 @@ jobs:
         release_name: Release ${{ github.ref }}
         draft: false
         prerelease: false
+
+    - name: Upload a Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ${{github.workspace}}/Release/TianLi.TruthEye.dll
+        asset_name: TianLi.TruthEye.dll
+        asset_content_type: application/x-msdownload
     
