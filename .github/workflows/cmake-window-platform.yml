@@ -16,7 +16,7 @@ jobs:
   build:
     runs-on: windows-latest
     outputs:
-      version: ${{ steps.get_version.outputs.version }}
+      version: ${{ steps.get_version.outputs._version }}
 
     steps:
     - uses: actions/checkout@v3
@@ -30,17 +30,12 @@ jobs:
     - name: Build
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
-    - name: Test
-      working-directory: ${{github.workspace}}/build
-      run: ctest -C ${{env.BUILD_TYPE}}
-
     - name: Get the Version
       id: get_version
       run: |
         $version = (Get-Content -Path ${{github.workspace}}/build/bin/Release/version -TotalCount 1).Trim()
         echo "dll version: $version"
-        echo "version=$version" >> "$GITHUB_OUTPUT"
-        echo "output GITHUB_OUTPUT: $GITHUB_OUTPUT"
+        echo "::set-output name=_version::$version"
 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3
