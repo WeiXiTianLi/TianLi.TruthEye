@@ -24,7 +24,7 @@ link_directories("../3rdparty/spdlog/lib")
 #link_directories(${minizip_SOURCE_DIR})
 
 if(MSVC)
-    set(VERSION_RC "${CMAKE_BINARY_DIR}/impl.version.rc")
+    set(VERSION_RC "${CMAKE_BINARY_DIR}/inface.version.rc")
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/inface.version.rc.in
                    "${VERSION_RC}")
 endif()
