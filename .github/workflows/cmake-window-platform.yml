@@ -55,15 +55,14 @@ jobs:
       env:
         Version: ${{ needs.build.outputs.version }}
       run: |
-        version=$env:Version
-        echo "version: $version"
+        echo "version: $env:Version"
         git fetch --tags
-        if git rev-parse $version >/dev/null 2>&1
+        if git rev-parse $env:Version >/dev/null 2>&1
         then
-          echo "version $version exist"
+          echo "version $env:Version exist"
           exit 1
         else
-          echo "version $version not exist"
+          echo "version $env:Version not exist"
           exit 0
         fi
     - name: Create Release Version
