@@ -1,3 +1,6 @@
 [submodule "third_party/qt-5.15.2-lite-release-static"]
 	path = third_party/qt-5.15.2-lite-release-static
 	url = https://github.com/GengGode/qt-5.15.2-lite-release-static.git
+[submodule "include"]
+	path = include
+	url = https://github.com/WeiXiTianLi/TianLi.TruthEye.Include.git
