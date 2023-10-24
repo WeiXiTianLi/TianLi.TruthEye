@@ -1,4 +1,4 @@
-// QApp.cpp: 定义动态链接库的实现
+﻿// QApp.cpp: 定义动态链接库的实现
 //
 
 #include "../include/TianLi.TruthEye.h"
@@ -71,7 +71,8 @@ static void CreateQApplication()
     TCHAR modulePath[MAX_PATH] = {0};
     GetModuleFileName(NULL, modulePath, MAX_PATH);
     char *argv[] = {(char *)modulePath};
-    g_app->setAttribute(Qt::AA_EnableHighDpiScaling);
+    // 禁用自适应高DPI缩放，改为传入缩放比例
+    // g_app->setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication app(argc, argv);
     spdlog::info("创建窗口事件循环 {}", modulePath);
     g_app = &app;
