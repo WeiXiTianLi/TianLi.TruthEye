@@ -4,7 +4,8 @@
 cmake_minimum_required (VERSION 3.20)
 
 # 设置第三方目录
-set(ThridPatryDir ${CMAKE_SOURCE_DIR}/third_party)
+set(ThirdPartyDir ${CMAKE_SOURCE_DIR}/third_party)
+set(DependentPatryDir ${CMAKE_SOURCE_DIR}/dependent_party)
 
 if (MSVC)
     add_compile_options(/utf-8)
@@ -18,9 +19,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 # 包含目录
-include_directories ("${PROJECT_SOURCE_DIR}/TianLi.TruthEye")
-include_directories ("${PROJECT_SOURCE_DIR}/Test")
+include_directories(${PROJECT_SOURCE_DIR}/source)
 
-# 包含子项目。
-add_subdirectory ("TianLi.TruthEye")
-add_subdirectory ("Test")
+# 包含子项目
+add_subdirectory(source)

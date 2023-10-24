@@ -2,9 +2,8 @@
 
 // 3rd
 #include <spdlog/spdlog.h>
-#include <cpp-httplib/include/httplib.h>
-#include <cpr/include/cpr/cpr.h>
-#include <cpr/include/curl/curl.h>
+#include <cpr/cpr/cpr.h>
+#include <cpr/curl/curl.h>
 // qt
 #include <QApplication>
 #include <QMetaType>

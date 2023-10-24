@@ -1,11 +1,9 @@
-﻿// QApp.cpp: 定义动态链接库的实现
+﻿// TianLi.TruthEye.cpp: 定义动态链接库的实现
 //
 
 #include "../include/TianLi.TruthEye.h"
 // src
-#include "source/form/te.popup.window.h"
-// vcpkg
-// #include <cpr/cpr.h>
+#include "form/te.popup.window.h"
 // qt
 #include <QApplication>
 #include <QMetaType>
@@ -30,6 +28,7 @@
 #include <spdlog/sinks/dup_filter_sink.h>
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/rotating_file_sink.h>
+
 void init_logger()
 {
     static bool is_inited = false;

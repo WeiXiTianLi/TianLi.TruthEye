@@ -5,7 +5,7 @@
 #include <QMouseEvent>
 #include <QPaintEvent>
 #include <QGraphicsDropShadowEffect>
-#include <meojson/include/json.hpp>
+#include <meojson/json.hpp>
 
 class tePopupWindow : public QWidget
 {
